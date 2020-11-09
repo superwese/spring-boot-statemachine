@@ -7,10 +7,11 @@ const firstDayToMigrate = moment('2016-10-01', 'YYYY-MM-DD');
 const lastDayToMigrate = moment('2020-11-11', 'YYYY-MM-DD');
 const asStartOfDay = 'YYYY-MM-DD 00:00:00';
 const asEndOfDay = 'YYYY-MM-DD 23:59:59';
+const sdsPath = 'rest/admin/sample-data/api/migration/tasks-execution-import/';
 
-async function triggerMigration(tenantUuid, startDate, endDate, stage, region) {
+async function triggerMigration(tenantUuid, dayToMigrate, stage, region) {
 
-  const authorization = `Basic ${base64.encode(config[stage][region].username + ":" + config[stage][region].password)}`;
+  const authorization = `Basic ${Buffer.from(config[stage][region].username + ":" + config[stage][region].password).toString('base64')}`;
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': authorization
@@ -18,14 +19,14 @@ async function triggerMigration(tenantUuid, startDate, endDate, stage, region) {
 
   const body = {
     tenantUuid: tenantUuid,
-    startDate: startDate,
-    endDate: endDate
+    timestampStart: dayToMigrate.format(asStartOfDay),
+    timestampEnd: dayToMigrate.format(asEndOfDay)
   };
 
   const response = await fetch(
-    `${config[stage][region].baseUrl}/rest/admin/sample-data/api/migration/tasks-execution-import/`,
+    `${config[stage][region].baseUrl}/${sdsPath}`,
     {
-      method: 'PUT',
+      method: 'POST',
       headers,
       body: JSON.stringify(body)
     }
@@ -45,9 +46,9 @@ async function triggerMigration(tenantUuid, startDate, endDate, stage, region) {
     let currentDate = firstDayToMigrate;
 
     do {
-      console.log(`trigger migration for ${tenantUuid}, ${currentDate.format(asStartOfDay)}, ${currentDate.format(asEndOfDay)}`);
+      console.log(`trigger migration for ${tenantUuid}, ${currentDate}`);
 
-      // await triggerMigration(tenantUuid, currentDate.format(asStartOfDay), currentDate.format(asEndOfDay), 'integration', 'europe');
+      await triggerMigration(tenantUuid, currentDate, 'integration', 'europe');
 
       currentDate.add(1, 'days');
     } while (!currentDate.isAfter(lastDayToMigrate))
