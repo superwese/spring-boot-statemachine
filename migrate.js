@@ -7,11 +7,11 @@ const firstDayToMigrate = moment('2016-10-01', 'YYYY-MM-DD');
 const lastDayToMigrate = moment('2020-11-11', 'YYYY-MM-DD');
 const asStartOfDay = 'YYYY-MM-DD 00:00:00';
 const asEndOfDay = 'YYYY-MM-DD 23:59:59';
-const sdsPath = 'rest/admin/sample-data/api/migration/tasks-execution-import/';
+const sdsPath = 'rest/admin/sample-data/api/migration/create-task-execution-imported-events/';
 
-async function triggerMigration(tenantUuid, dayToMigrate, stage, region) {
+async function triggerMigration(tenantUuid, dayToMigrate) {
 
-  const authorization = `Basic ${Buffer.from(config[stage][region].username + ":" + config[stage][region].password).toString('base64')}`;
+  const authorization = `Basic ${Buffer.from("Developer:" + process.env.PASSWORD).toString('base64')}`;
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': authorization
@@ -24,7 +24,7 @@ async function triggerMigration(tenantUuid, dayToMigrate, stage, region) {
   };
 
   const response = await fetch(
-    `${config[stage][region].baseUrl}/${sdsPath}`,
+    `${config[process.env.STAGE][process.env.REGION].baseUrl}/${sdsPath}`,
     {
       method: 'POST',
       headers,
@@ -48,7 +48,7 @@ async function triggerMigration(tenantUuid, dayToMigrate, stage, region) {
     do {
       console.log(`trigger migration for ${tenantUuid}, ${currentDate}`);
 
-      await triggerMigration(tenantUuid, currentDate, 'integration', 'europe');
+      await triggerMigration(tenantUuid, currentDate);
 
       currentDate.add(1, 'days');
     } while (!currentDate.isAfter(lastDayToMigrate))
