@@ -3,7 +3,7 @@ const moment = require('moment');
 const config = require('./config');
 
 const tenantUuids = ['5098df93-20c1-4a28-a007-cd548521d30a'];
-const firstDayToMigrate = moment('2016-10-01', 'YYYY-MM-DD');
+const firstDayToMigrate = moment('2020-11-11', 'YYYY-MM-DD');
 const lastDayToMigrate = moment('2020-11-11', 'YYYY-MM-DD');
 const asStartOfDay = 'YYYY-MM-DD 00:00:00';
 const asEndOfDay = 'YYYY-MM-DD 23:59:59';
