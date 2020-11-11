@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  createEvents
+
+  Sample SAM Template for createEvents
+
+Resources:
+  EventCreatorStateMachine:
+    Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
+    Properties:
+      DefinitionUri: statemachine/taskExecutionEventCreator.asl.json
+      DefinitionSubstitutions:
+        IncrementFunctionArn: !GetAtt IncrementFunction.Arn
+        SumFunctionArn: !GetAtt SumFunction.Arn
+        GetTaskExecutionsFunctionArn: !GetAtt GetTaskExecutionsFunction.Arn
+        ConvertTaskExecutionFunctionArn: !GetAtt ConvertTaskExecutionFunction.Arn
+        StockBuyerFunctionArn: !GetAtt StockBuyerFunction.Arn
+        DDBPutItem: !Sub arn:${AWS::Partition}:states:::dynamodb:putItem
+        DDBTable: !Ref TransactionTable
+
+      Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+        - LambdaInvokePolicy:
+            FunctionName: !Ref IncrementFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref SumFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref ConvertTaskExecutionFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref GetTaskExecutionsFunction
+        - DynamoDBWritePolicy:
+            TableName: !Ref TransactionTable
+
+  IncrementFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      Handler: index.handler
+      InlineCode: |
+        exports.handler = async (event) =>  ++event;
+  SumFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      Handler: index.handler
+      InlineCode: |
+        exports.handler = async (event) =>  parseInt(event.a) + parseInt(event.b)
+
+
+
+
+  GetTaskExecutionsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
+    Properties:
+      CodeUri: functions/GetTaskExecutions
+      Handler: StockChecker.src.main.java.stockChecker.App::handleRequest
+      Runtime: java11
+      MemorySize: 512
+
+  ConvertTaskExecutionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/ConvertTaskExecution
+      Handler: StockSeller.src.main.java.stockSeller.App::handleRequest
+      Runtime: java11
+      MemorySize: 512
+
+  StockBuyerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/StockBuyer
+      Handler: StockBuyer.src.main.java.stockBuyer.App::handleRequest
+      Runtime: java11
+      MemorySize: 512
+
+  TransactionTable:
+    Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
+    Properties:
+      PrimaryKey:
+        Name: Id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+Outputs:
+  # StockTradingStateMachineHourlyTradingSchedule is an implicit Schedule event rule created out of Events key under Serverless::StateMachine
+  # Find out more about other implicit resources you can reference within SAM
+  # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-generated-resources.html
+  StockTradingStateMachineArn:
+    Description: "Stock Trading State machine ARN"
+    Value: !Ref StockTradingStateMachine
+  StockTradingStateMachineRoleArn:
+    Description: "IAM Role created for Stock Trading State machine based on the specified SAM Policy Templates"
+    Value: !GetAtt StockTradingStateMachineRole.Arn
