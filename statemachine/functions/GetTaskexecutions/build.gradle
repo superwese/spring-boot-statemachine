@@ -1,11 +1,11 @@
 plugins {
     id 'java'
 }
-
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 repositories {
     mavenCentral()
 }
-
 dependencies {
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.0'
     testImplementation 'junit:junit:4.13.1'
