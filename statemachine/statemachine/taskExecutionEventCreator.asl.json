@@ -1,0 +1,128 @@
+{
+  "Comment": "A state machine that retrieves taskexecutions from SDS and sends them to an SNS Topic for further processing",
+  "StartAt": "Read messages from SQS queue",
+  "States": {
+    "Fill Config": {
+      "Type": "Pass",
+      "Result": {
+        "tenantUuid": "DEADBEEF-0000-0000-0000-000000000000",
+        "startDate": "2016-10-01T00:00:00Z",
+        "enddate": "2016-10-01T00:00:00Z",
+        "page": 0
+      },
+      "Next": "Restart Config"
+    },
+    "Restart Config": {
+      "Type": "Pass",
+      "Result": {
+        "StateMachineArn": "${StateMachineArn}",
+        "maxExecutionCount": 5000,
+        "executed": 0
+      },
+      "ResultPath": "$.restart",
+      "Next": "Get Taskexecutions"
+    },
+    "Get Taskexecutions": {
+      "Type": "Task",
+      "Resource": "${GetTaskExecutionsFunctionArn}",
+      "ResultPath": "$.taskexecutions",
+      "Next": "Process Messages"
+    },
+    "Process Messages": {
+      "Type": "Map",
+      "MaxConcurrency": 10,
+      "Next": "Count Executed",
+      "InputPath": "$.taskexecutions",
+      "ResultPath": "$.iteratorOut",
+      "ItemsPath": "$.content",
+      "Parameters": {
+        "uuid.$": "$$.Map.Item.Value",
+        "index.$": "$$.Map.Item.Index"
+      },
+      "Iterator": {
+        "StartAt": "Convert Taskexecution",
+        "States": {
+          "Convert Taskexecution": {
+            "Type": "Task",
+            "Comment": "Convert speichert die Taskexecution in einem S3 Bucket und übergibt die arn/url",
+            "Resource": "${ConvertTaskExecutionFunctionArn}",
+            "ResultPath": "$.s3Location",
+            "Next": "Remove message from SQS queue"
+          },
+          "Publish message to SNS topic": {
+            "Comment": "Was immer man tun muss",
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sns:publish",
+            "Parameters": {
+              "MessageAttributes": {
+                "S3Location": {
+                  "DataType": "String",
+                  "StringValue": "$.s3Location"
+                }
+              },
+              "Subject": "New Taskexecution",
+              "Message.$": "$.uuid",
+              "TopicArn": "${SNSTopicArn}"
+            },
+            "Next": "One Message Processed"
+          },
+          "One Message Processed": {
+            "Comment": "Bestimmt den output des Iterators",
+            "Type": "Pass",
+            "Result": "$.index",
+            "End": true
+          }
+        }
+      }
+    },
+    "Count Executed": {
+      "Type": "Task",
+      "ResultPath": "$.restart.executed",
+      "Parameters": {
+        "a.$": "$.iteratorOut[-1:]",
+        "b.$": "$.restart.executed"
+      },
+      "Resource": "${SumFunctionArn}",
+      "Next": "More Taskexecutions?"
+    },
+
+    "More Taskexecutions?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.taskexecutions.last",
+          "BooleanEquals": true,
+          "Next": "Finish"
+        }
+      ],
+      "Default": "Next Taskexecution Page"
+    },
+    "Next Taskexecution Page": {
+      "Type": "Task",
+      "Resource": "${IncrementFunctionArn}",
+      "InputPath": "$.page",
+      "ResultPath": "$.page",
+      "Next": "Should Restart?"
+    },
+    "Should Restart?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.restart.maxExecutionCount",
+          "NumericLessThanEqualsPath": "$.restart.executed",
+          "Next": "Restart"
+        }
+      ],
+      "Default": "Get Taskexecutions"
+    },
+    "Restart": {
+      "Type": "Task",
+      "Resource": "${RestartFunctionArn}",
+      "Next": "Finish"
+    },
+
+    "Finish": {
+      "Type": "Succeed"
+    }
+  }
+}
