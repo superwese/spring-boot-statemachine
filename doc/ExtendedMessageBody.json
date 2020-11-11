@@ -1,0 +1,34 @@
+{
+  "Type": "Notification",
+  "MessageId": "423bcff4-ab99-5b3e-ac2e-97d166ed8d3f",
+  "TopicArn": "arn:aws:sns:eu-central-1:926648644954:P-TaskExecutionImportedEventSDSTopic",
+  "Subject": "TASK_EXECUTION_IMPORTED",
+  "Message": "[\"software.amazon.payloadoffloading.PayloadS3Pointer\",{\"s3BucketName\":\"sample-data-eu-central-1-extended-sns-task-execution\",\"s3Key\":\"8a2b39a4-27cc-4f44-b65b-9a80f4ec4664\"}]",
+  "Timestamp": "2020-11-11T11:29:56.142Z",
+  "SignatureVersion": "1",
+  "Signature": "frettw0v0u/RhD/imJozzQSSFRdnGDUSG6ZPgmuPwBsmro3mLMg7O8xdxwdLt/d1ZH1H2eW5V8VnNsEEHQpVVWJRCYXuQIw5ZieHzUjABSQTPSGkGQmaV8hvKny6d9AbKbZF5+HVlGarBkBYqyRHw1pb+LiQwsuyeQE3k1ZCdiICaaC5g1OlWl4Wfirwstc+kdK47p1FRbG9OZJo1qWBCOZY3kltXAUtLXbeEhp17HwuN9lelsQvweyv71wleyK0/vd4Z33GO9VshbI5XenwmV5KyhtyVoRFnudGBOdLBHeqQLhCeVpl0nGU3x+qu3OWP5lTlkyMUZPN/9ac9ep9Lw==",
+  "SigningCertURL": "https://sns.eu-central-1.amazonaws.com/SimpleNotificationService-a86cb10b4e1f29c941702d737128f7b6.pem",
+  "UnsubscribeURL": "https://sns.eu-central-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-central-1:926648644954:P-TaskExecutionImportedEventSDSTopic:0a47c87b-7ba3-482e-87bc-708ea8fc9c53",
+  "MessageAttributes": {
+    "NOTIFICATION_SUBJECT_HEADER": {
+      "Type": "String",
+      "Value": "TASK_EXECUTION_IMPORTED"
+    },
+    "id": {
+      "Type": "String",
+      "Value": "54bae557-0fef-4421-22ae-cb190be92f9f"
+    },
+    "contentType": {
+      "Type": "String",
+      "Value": "text/plain;charset=UTF-8"
+    },
+    "timestamp": {
+      "Type": "Number.java.lang.Long",
+      "Value": "1605094196094"
+    },
+    "ExtendedPayloadSize": {
+      "Type": "Number",
+      "Value": "5074"
+    }
+  }
+}
