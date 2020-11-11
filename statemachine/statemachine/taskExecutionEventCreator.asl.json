@@ -26,12 +26,18 @@
       "Type": "Task",
       "Resource": "${GetTaskExecutionsFunctionArn}",
       "ResultPath": "$.taskexecutions",
+      "Retry": [ {
+        "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException" ],
+        "IntervalSeconds": 2,
+        "MaxAttempts": 6,
+        "BackoffRate": 2
+      } ],
       "Next": "Process Messages"
     },
     "Process Messages": {
       "Type": "Map",
       "MaxConcurrency": 10,
-      "Next": "Count Executed",
+      "Next": "Count ProcessedTaksExecutions",
       "InputPath": "$.taskexecutions",
       "ResultPath": "$.iteratorOut",
       "ItemsPath": "$.content",
@@ -47,6 +53,17 @@
             "Comment": "fetches one te from DB, serializes it to an TaskExecutionCreatedEvent DAO, saves it to S3 Bucket(?) and returns the arn/url",
             "Resource": "${ConvertTaskExecutionFunctionArn}",
             "ResultPath": "$.s3Location",
+            "Retry": [ {
+              "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException" ],
+              "IntervalSeconds": 2,
+              "MaxAttempts": 6,
+              "BackoffRate": 2
+            } ],
+            "Catch": [ {
+              "ErrorEquals": ["States.ALL"],
+              "ResultPath": "$.error-info",
+              "Next": "Report Error"
+            } ],
             "Next": "Publish message to SNS topic"
           },
           "Publish message to SNS topic": {
@@ -61,9 +78,66 @@
                 }
               },
               "Subject": "New Taskexecution",
-              "Message.$": "$.uuid",
+              "Message.$": "$",
               "TopicArn": "${SNSTopicArn}"
             },
+            "Next": "Report Success"
+          },
+          "Report Success": {
+            "Type": "Task",
+            "Resource": "${DDBPutItem}",
+            "Parameters": {
+              "TableName": "${DDBTable}",
+              "Item": {
+                "uuid": {
+                  "S.$": "$.uuid"
+                },
+                "status": {
+                  "S": "success"
+                }
+              }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "States.TaskFailed"
+                ],
+                "IntervalSeconds": 20,
+                "MaxAttempts": 5,
+                "BackoffRate": 10
+              }
+            ],
+            "Next": "One Message Processed"
+          },
+
+          "Report Error": {
+            "Type": "Task",
+            "End": true,
+            "Resource": "${DDBPutItem}",
+            "Parameters": {
+              "TableName": "${DDBTable}",
+              "Item": {
+                "uuid": {
+                  "S.$": "$.uuid"
+                },
+                "status": {
+                  "S": "error"
+                },
+                "error": {
+                  "S.$": "States.StringToJson($.error-info.Cause)"
+                }
+              }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "States.TaskFailed"
+                ],
+                "IntervalSeconds": 20,
+                "MaxAttempts": 5,
+                "BackoffRate": 10
+              }
+            ],
             "Next": "One Message Processed"
           },
           "One Message Processed": {
@@ -75,7 +149,7 @@
         }
       }
     },
-    "Count Executed": {
+    "Count ProcessedTaksExecutions": {
       "Type": "Task",
       "ResultPath": "$.restart.numberOfProcessedTaksExecutions",
       "Parameters": {
