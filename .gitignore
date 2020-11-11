@@ -1,6 +1,4 @@
 .gradle
-/build/
-gradle/
 dist/
 node_modules
 app/.env
@@ -30,3 +28,5 @@ app/dist
 /dist/
 /nbdist/
 /.nb-gradle/
+.aws-sam/
+build/

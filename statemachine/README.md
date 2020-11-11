@@ -1,5 +1,10 @@
 # createEvents
 
+## local development
+due to https://github.com/aws/aws-sam-cli/issues/1932: 
+`export AWS_DEFAULT_REGION=eu-central-1
+`
+##Original README:
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders:
 
 - functions - Code for the application's Lambda functions to check the value of, buy, or sell shares of a stock. It also contains unit tests for the Lambda functions' application code.

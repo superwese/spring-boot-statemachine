@@ -1,14 +1,13 @@
 {
   "Comment": "A state machine that retrieves taskexecutions from SDS and sends them to an SNS Topic for further processing",
-  "StartAt": "Read messages from SQS queue",
+  "StartAt": "Fill Config",
   "States": {
     "Fill Config": {
       "Type": "Pass",
       "Result": {
         "tenantUuid": "DEADBEEF-0000-0000-0000-000000000000",
         "startDate": "2016-10-01T00:00:00Z",
-        "enddate": "2016-10-01T00:00:00Z",
-        "page": 0
+        "enddate": "2016-10-01T00:00:00Z"
       },
       "Next": "Restart Config"
     },
@@ -17,21 +16,28 @@
       "Result": {
         "StateMachineArn": "${StateMachineArn}",
         "maxExecutionCount": 5000,
-        "executed": 0
+        "numberOfProcessedTaksExecutions": 0
       },
       "ResultPath": "$.restart",
       "Next": "Get Taskexecutions"
     },
     "Get Taskexecutions": {
+      "Comment": "Get's a 'paged' resultset of taskexecution uuids",
       "Type": "Task",
       "Resource": "${GetTaskExecutionsFunctionArn}",
       "ResultPath": "$.taskexecutions",
+      "Retry": [ {
+        "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException" ],
+        "IntervalSeconds": 2,
+        "MaxAttempts": 6,
+        "BackoffRate": 2
+      } ],
       "Next": "Process Messages"
     },
     "Process Messages": {
       "Type": "Map",
       "MaxConcurrency": 10,
-      "Next": "Count Executed",
+      "Next": "Count ProcessedTaksExecutions",
       "InputPath": "$.taskexecutions",
       "ResultPath": "$.iteratorOut",
       "ItemsPath": "$.content",
@@ -44,10 +50,21 @@
         "States": {
           "Convert Taskexecution": {
             "Type": "Task",
-            "Comment": "Convert speichert die Taskexecution in einem S3 Bucket und übergibt die arn/url",
+            "Comment": "fetches one te from DB, serializes it to an TaskExecutionCreatedEvent DAO, saves it to S3 Bucket(?) and returns the arn/url",
             "Resource": "${ConvertTaskExecutionFunctionArn}",
             "ResultPath": "$.s3Location",
-            "Next": "Remove message from SQS queue"
+            "Retry": [ {
+              "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException" ],
+              "IntervalSeconds": 2,
+              "MaxAttempts": 6,
+              "BackoffRate": 2
+            } ],
+            "Catch": [ {
+              "ErrorEquals": ["States.ALL"],
+              "ResultPath": "$.error-info",
+              "Next": "Report Error"
+            } ],
+            "Next": "Publish message to SNS topic"
           },
           "Publish message to SNS topic": {
             "Comment": "Was immer man tun muss",
@@ -61,9 +78,66 @@
                 }
               },
               "Subject": "New Taskexecution",
-              "Message.$": "$.uuid",
+              "Message.$": "$",
               "TopicArn": "${SNSTopicArn}"
             },
+            "Next": "Report Success"
+          },
+          "Report Success": {
+            "Type": "Task",
+            "Resource": "${DDBPutItem}",
+            "Parameters": {
+              "TableName": "${DDBTable}",
+              "Item": {
+                "uuid": {
+                  "S.$": "$.uuid"
+                },
+                "status": {
+                  "S": "success"
+                }
+              }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "States.TaskFailed"
+                ],
+                "IntervalSeconds": 20,
+                "MaxAttempts": 5,
+                "BackoffRate": 10
+              }
+            ],
+            "Next": "One Message Processed"
+          },
+
+          "Report Error": {
+            "Type": "Task",
+            "End": true,
+            "Resource": "${DDBPutItem}",
+            "Parameters": {
+              "TableName": "${DDBTable}",
+              "Item": {
+                "uuid": {
+                  "S.$": "$.uuid"
+                },
+                "status": {
+                  "S": "error"
+                },
+                "error": {
+                  "S.$": "States.StringToJson($.error-info.Cause)"
+                }
+              }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "States.TaskFailed"
+                ],
+                "IntervalSeconds": 20,
+                "MaxAttempts": 5,
+                "BackoffRate": 10
+              }
+            ],
             "Next": "One Message Processed"
           },
           "One Message Processed": {
@@ -75,12 +149,12 @@
         }
       }
     },
-    "Count Executed": {
+    "Count ProcessedTaksExecutions": {
       "Type": "Task",
-      "ResultPath": "$.restart.executed",
+      "ResultPath": "$.restart.numberOfProcessedTaksExecutions",
       "Parameters": {
         "a.$": "$.iteratorOut[-1:]",
-        "b.$": "$.restart.executed"
+        "b.$": "$.restart.numberOfProcessedTaksExecutions"
       },
       "Resource": "${SumFunctionArn}",
       "Next": "More Taskexecutions?"
@@ -109,7 +183,7 @@
       "Choices": [
         {
           "Variable": "$.restart.maxExecutionCount",
-          "NumericLessThanEqualsPath": "$.restart.executed",
+          "NumericLessThanEqualsPath": "$.restart.numberOfProcessedTaksExecutions",
           "Next": "Restart"
         }
       ],
