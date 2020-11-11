@@ -7,8 +7,7 @@
       "Result": {
         "tenantUuid": "DEADBEEF-0000-0000-0000-000000000000",
         "startDate": "2016-10-01T00:00:00Z",
-        "enddate": "2016-10-01T00:00:00Z",
-        "page": 0
+        "enddate": "2016-10-01T00:00:00Z"
       },
       "Next": "Restart Config"
     },
