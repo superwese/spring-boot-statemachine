@@ -1,6 +1,6 @@
 {
   "Comment": "A state machine that retrieves taskexecutions from SDS and sends them to an SNS Topic for further processing",
-  "StartAt": "Read messages from SQS queue",
+  "StartAt": "Fill Config",
   "States": {
     "Fill Config": {
       "Type": "Pass",
@@ -17,12 +17,13 @@
       "Result": {
         "StateMachineArn": "${StateMachineArn}",
         "maxExecutionCount": 5000,
-        "executed": 0
+        "numberOfProcessedTaksExecutions": 0
       },
       "ResultPath": "$.restart",
       "Next": "Get Taskexecutions"
     },
     "Get Taskexecutions": {
+      "Comment": "Get's a 'paged' resultset of taskexecution uuids",
       "Type": "Task",
       "Resource": "${GetTaskExecutionsFunctionArn}",
       "ResultPath": "$.taskexecutions",
@@ -44,10 +45,10 @@
         "States": {
           "Convert Taskexecution": {
             "Type": "Task",
-            "Comment": "Convert speichert die Taskexecution in einem S3 Bucket und übergibt die arn/url",
+            "Comment": "fetches one te from DB, serializes it to an TaskExecutionCreatedEvent DAO, saves it to S3 Bucket(?) and returns the arn/url",
             "Resource": "${ConvertTaskExecutionFunctionArn}",
             "ResultPath": "$.s3Location",
-            "Next": "Remove message from SQS queue"
+            "Next": "Publish message to SNS topic"
           },
           "Publish message to SNS topic": {
             "Comment": "Was immer man tun muss",
@@ -77,10 +78,10 @@
     },
     "Count Executed": {
       "Type": "Task",
-      "ResultPath": "$.restart.executed",
+      "ResultPath": "$.restart.numberOfProcessedTaksExecutions",
       "Parameters": {
         "a.$": "$.iteratorOut[-1:]",
-        "b.$": "$.restart.executed"
+        "b.$": "$.restart.numberOfProcessedTaksExecutions"
       },
       "Resource": "${SumFunctionArn}",
       "Next": "More Taskexecutions?"
@@ -109,7 +110,7 @@
       "Choices": [
         {
           "Variable": "$.restart.maxExecutionCount",
-          "NumericLessThanEqualsPath": "$.restart.executed",
+          "NumericLessThanEqualsPath": "$.restart.numberOfProcessedTaksExecutions",
           "Next": "Restart"
         }
       ],
