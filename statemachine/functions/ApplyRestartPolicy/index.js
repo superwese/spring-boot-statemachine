@@ -7,18 +7,20 @@ const response = require('cfnresponse');
 
 exports.handler = function(event, context) {
     console.log("event: ", event);
-    const functionArn = event.ResourceProperties.functionArn;
-    const statemachineArn = event.ResourceProperties.stateMachineArn ;
+    const { ResourceProperties = {} } = event;
+    const functionArn = ResourceProperties.functionArn;
+    const statemachineArn = ResourceProperties.stateMachineArn ;
     if (event.RequestType != 'Delete') { //check if this handles Update correctly
-/*
-        var params = {
-            FunctionName: "ContextTest",
-            Qualifier: "Dings"
-        };
-        const func = await lambda.getFunction(params).promise();
-        const role = func.Role
-        console.log("policy:", func);
 
+        var functionParams = {
+            FunctionName: functionArn,
+        };
+        console.log("functionParams", functionParams);
+        console.log("version", event.ResourceProperties.FunctionVersion)
+        //const func =  lambda.getFunction(functionParams).promise();
+        //const role = func.Role
+        //console.log("function:", func);
+/*
         - get Role from lamda
         - createPolicy:
         {
@@ -45,8 +47,9 @@ exports.handler = function(event, context) {
                 console.log("Role attached successfully");
             }
         });
+        physicalID: "" + Math.random();
 
  */
     }
-    response.send(event, context, response.SUCCESS, {"hallo": "fertig"});
+    response.send(event, context, response.SUCCESS, {"hallo": "fertig"} );
 }

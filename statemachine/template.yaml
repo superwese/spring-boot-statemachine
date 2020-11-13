@@ -76,6 +76,7 @@ Resources:
       Runtime: nodejs12.x
       Handler: index.handler
       CodeUri: functions/ApplyRestartPolicy
+      AutoPublishAlias: live
       Policies:
         - AWSLambdaBasicExecutionRole
         - Version: 2012-10-17
@@ -107,9 +108,10 @@ Resources:
   ApplyRestartPolicy:
     Type: Custom::ApplyRestartPolicy
     Properties:
-      ServiceToken: !GetAtt 'ApplyRestartPolicyFunction.Arn'
-      StatemachineArn: !GetAtt 'EventCreatorStateMachine.Name'
-      FunctionArn: !GetAtt 'RestartFunction.Arn'
+      ServiceToken: !GetAtt ApplyRestartPolicyFunction.Arn
+      StatemachineArn: !GetAtt EventCreatorStateMachine.Name
+      FunctionArn: !GetAtt RestartFunction.Arn
+      FunctionVersion: !GetAtt ApplyRestartPolicyFunction.Version.Version
 
 Outputs:
   EventCreatorStateMachineArn:
