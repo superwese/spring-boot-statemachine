@@ -1,0 +1,14 @@
+{
+  "RequestType": "Create",
+  "ServiceToken": "arn:aws:lambda:eu-central-1:832077700054:function:createTaskexecutionEvents-ApplyRestartPolicyFuncti-8FIBDA0DE7BL",
+  "ResponseURL": "https://cloudformation-custom-resource-response-eucentral1.s3.eu-central-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aeu-central-1%3A832077700054%3Astack/createTaskexecutionEvents3/dbd93bf0-25d9-11eb-bd1e-0a738d9d93c8%7CApplyRestartPolicy%7C555efd6c-999b-4196-9d05-07b166d319f4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20201113T175952Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAYYGVRKE7KNEAWUMW%2F20201113%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Signature=16a8cc30e961138dff4d3b2292cec67deadb18fe167eea5c7ee6889d5d926ff0",
+  "StackId": "arn:aws:cloudformation:eu-central-1:832077700054:stack/createTaskexecutionEvents3/dbd93bf0-25d9-11eb-bd1e-0a738d9d93c8",
+  "RequestId": "555efd6c-999b-4196-9d05-07b166d319f4",
+  "LogicalResourceId": "ApplyRestartPolicy",
+  "ResourceType": "Custom::ApplyRestartPolicy",
+  "ResourceProperties": {
+    "ServiceToken": "arn:aws:lambda:eu-central-1:832077700054:function:createTaskexecutionEvents-ApplyRestartPolicyFuncti-8FIBDA0DE7BL",
+    "FunctionArn": "arn:aws:lambda:eu-central-1:832077700054:function:createTaskexecutionEvents3-RestartFunction-141WHUDCOHUC",
+    "StatemachineArn": "EventCreatorStateMachine-HfUJXHLfzJvn"
+  }
+}

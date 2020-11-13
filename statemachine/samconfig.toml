@@ -3,7 +3,7 @@ version = 0.1
 [playground]
 [playground.deploy]
 [playground.deploy.parameters]
-stack_name = "createTaskexecutionEvents"
+stack_name = "createTaskexecutionEvents3"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-48p0uojlwoeb"
 s3_prefix = "createTaskexecutionEvents"
 region = "eu-central-1"
