@@ -15,7 +15,6 @@ Resources:
         SumFunctionArn: !GetAtt SumFunction.Arn
         GetTaskExecutionsFunctionArn: !GetAtt GetTaskExecutionsFunction.Arn
         ConvertTaskExecutionFunctionArn: !GetAtt ConvertTaskExecutionFunction.Arn
-        StockBuyerFunctionArn: !GetAtt StockBuyerFunction.Arn
         DDBPutItem: !Sub arn:${AWS::Partition}:states:::dynamodb:putItem
         DDBTable: !Ref TransactionTable
 
@@ -47,29 +46,19 @@ Resources:
         exports.handler = async (event) =>  parseInt(event.a) + parseInt(event.b)
 
 
-
-
   GetTaskExecutionsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
-      CodeUri: functions/GetTaskExecutions
-      Handler: StockChecker.src.main.java.stockChecker.App::handleRequest
+      CodeUri: functions/GetTaskexecutions
+      Handler: stockChecker.App::handleRequest
       Runtime: java11
       MemorySize: 512
 
   ConvertTaskExecutionFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/ConvertTaskExecution
+      CodeUri: functions/ConvertTaskexecution
       Handler: StockSeller.src.main.java.stockSeller.App::handleRequest
-      Runtime: java11
-      MemorySize: 512
-
-  StockBuyerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: functions/StockBuyer
-      Handler: StockBuyer.src.main.java.stockBuyer.App::handleRequest
       Runtime: java11
       MemorySize: 512
 

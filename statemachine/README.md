@@ -4,6 +4,9 @@
 due to https://github.com/aws/aws-sam-cli/issues/1932: 
 `export AWS_DEFAULT_REGION=eu-central-1
 `
+ mark .aws-sam as Excluded in IDEA
+
+see https://github.com/aws/aws-sam-cli/issues/2021
 ##Original README:
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders:
 

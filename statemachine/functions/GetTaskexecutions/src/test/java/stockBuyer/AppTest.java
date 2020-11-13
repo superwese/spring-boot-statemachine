@@ -1,11 +1,12 @@
-package StockBuyer.src.test.java.stockBuyer;
+package stockBuyer;
+
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.Test;
-import StockBuyer.src.main.java.stockBuyer.App;
 
 public class AppTest {
 

@@ -1,11 +1,12 @@
-package StockBuyer.src.main.java.stockBuyer;
+package stockBuyer;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Handler for requests to Lambda function.
