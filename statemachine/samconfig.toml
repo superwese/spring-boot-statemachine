@@ -1,0 +1,112 @@
+version = 0.1
+
+[playground]
+[playground.deploy]
+[playground.deploy.parameters]
+stack_name = "createTaskexecutionEvents"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-48p0uojlwoeb"
+s3_prefix = "createTaskexecutionEvents"
+region = "eu-central-1"
+confirm_changeset = true
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "Stage=play",
+    "SpringProfilesActive=playground",
+    "RdsHostname=sample-data-playground.cqhlntyng9ns.eu-central-1.rds.amazonaws.com",
+    "RdsPort=3306",
+    "EncryptedDatabasePassword=AQECAHjigSYknVYELGGhaOpoBtVYHCgDZEeRlnwwkxqWmiq16QAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPg1RY8tTn3+XgjpLwIBEIArGeLYsF+HAQ7lf3Q4LGu56byfFXF2fHjk2I3WM6/d+svTqGCJpHV1KTTeRA=="
+    ]
+profile = "playground"
+
+
+[integration]
+[integration.deploy]
+[integration.deploy.parameters]
+stack_name = "createTaskexecutionEvents-i"
+s3_bucket = "i-lambda-functions-eu-central-1-food-saveris-net"
+s3_prefix = "createTaskexecutionEvents-i"
+region = "eu-central-1"
+confirm_changeset = false
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "Stage=int",
+    "SpringProfilesActive=aws",
+    "RdsHostname=sample-data-i.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
+    "RdsPort=3306",
+    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDIY5GEE7yJ4JOYAahQIBEIAr3EO3RaDtNs1iq1L2HHkqopPDtMRkXFRU5dkLl+sV8A3Wpa4LVECu1AOSfA=="
+]
+
+[qs]
+[qs.deploy]
+[qs.deploy.parameters]
+stack_name = "createTaskexecutionEvents-qs"
+s3_bucket = "i-lambda-functions-eu-central-1-food-saveris-net"
+s3_prefix = "createTaskexecutionEvents-qs"
+region = "eu-central-1"
+confirm_changeset = false
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "Stage=qs",
+    "SpringProfilesActive=aws",
+    "RdsHostname=sample-data-qs-v2.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
+    "RdsPort=3306",
+    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDF3JDdTqOg0JdUiq6gIBEIArQw6HvQudfgBVVVP6+sdkuKp/w6CUfz0Se3cOgcIv4y/chHntqTRDe2zrkg=="
+]
+
+[prod-eu]
+[prod-eu.deploy]
+[prod-eu.deploy.parameters]
+stack_name = "createTaskexecutionEvents-prod"
+s3_bucket = "p-lambda-functions-eu-central-1-food-saveris-net"
+s3_prefix = "createTaskexecutionEvents"
+region = "eu-central-1"
+confirm_changeset = false
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "Stage=prod",
+    "SpringProfilesActive=aws",
+    "RdsHostname=sample-data.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
+    "RdsPort=3306",
+    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDOJMehAzbsfAGMivHwIBEIAr87R/vIgVImVuMrdsegqfI6VGiMArLrsuEacxnTuJpX2yx1aMQ3KElYSUOw=="
+]
+
+[prod-americas]
+[prod-americas.deploy]
+[prod-americas.deploy.parameters]
+stack_name = "createTaskexecutionEvents-prod"
+s3_bucket = "p-lambda-functions-us-west-2-food-saveris-net"
+s3_prefix = "createTaskexecutionEvents"
+region = "us-west-2"
+confirm_changeset = false
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "Stage=prod",
+    "SpringProfilesActive=aws",
+    "RdsHostname=sample-data.csmcuq4yywxx.us-west-2.rds.amazonaws.com",
+    "RdsPort=3306",
+    "EncryptedDatabasePassword=AQECAHhqETYESuYlj+q9YB206pzpAZn0F6dulSAZW2o4Yqp+cAAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDNzW2UbHFwl2JvYH1wIBEIArqK4MJFZycty1lOfbth+V84kJCpiroQEtnrAF0S9aPc4dE4Nu2SXof1SDug=="
+]
+
+[prod-apac]
+[prod-apac.deploy]
+[prod-apac.deploy.parameters]
+stack_name = "createTaskexecutionEvents-prod"
+s3_bucket = "p-lambda-functions-ap-southeast-1-food-saveris-net"
+s3_prefix = "createTaskexecutionEvents"
+region = "ap-southeast-1"
+confirm_changeset = false
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "Stage=prod",
+    "SpringProfilesActive=aws",
+    "RdsHostname=sample-data.ccn3vvbf5o9u.ap-southeast-1.rds.amazonaws.com",
+    "RdsPort=3306",
+    "EncryptedDatabasePassword=AQECAHj/qwPgY21OqIsc80gt4mFcyMaD8wpq/cYh9p51QaMU9AAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGCzwymfBjSbSQQWcgIBEIAr6BJwsHmFQKzpIy+54nBaaz83o6ZeBT/4sno/kBPBCALwm27qBs6BNulocA=="
+]
+
