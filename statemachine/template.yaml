@@ -84,8 +84,7 @@ Resources:
               Action:
                 - lambda:GetFunction
               Resource: !GetAtt RestartFunction.Arn
-
-        - Version: 2012-10-17,
+        - Version: 2012-10-17
           Statement:
             - Effect: Allow
               Action: iam:AttachRolePolicy
