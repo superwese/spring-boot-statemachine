@@ -2,7 +2,8 @@
 
 ## local development
 due to https://github.com/aws/aws-sam-cli/issues/1932: 
-`export AWS_DEFAULT_REGION=eu-central-1
+`
+export AWS_DEFAULT_REGION=eu-central-1
 `
  mark .aws-sam as Excluded in IDEA
 
