@@ -72,11 +72,28 @@ Resources:
 
   ApplyRestartPolicyFunction:
     Type: AWS::Serverless::Function
-    #needs lambda:getFunction,iam.attachRolePolicy
     Properties:
       Runtime: nodejs12.x
       Handler: index.handler
       CodeUri: functions/ApplyRestartPolicy
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - lambda:GetFunction
+              Resource: !GetAtt RestartFunction.Arn
+
+        - Version: 2012-10-17,
+          Statement:
+            - Effect: Allow
+              Action: iam:AttachRolePolicy
+              Resource: !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref 'AWS::AccountId'
+                  - ':role/*'
 
   TransactionTable:
     Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
