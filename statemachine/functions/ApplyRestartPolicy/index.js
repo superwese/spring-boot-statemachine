@@ -51,5 +51,5 @@ exports.handler = async function(event, context) {
 
  */
     }
-    return response.send(event, context, response.SUCCESS, {"hallo": "fertig"}, physicalID );
+    await response.send(event, context, response.SUCCESS, {"hallo": "fertig"}, physicalID );
 }

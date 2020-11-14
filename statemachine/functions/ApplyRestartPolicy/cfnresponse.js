@@ -38,13 +38,11 @@ exports.send = function (event, context, responseStatus, responseData, physicalR
         var request = https.request(options, function (response) {
             console.log("Status code: " + response.statusCode);
             console.log("Status message: " + response.statusMessage);
-            context.done();
             resolve(response);
         });
 
         request.on("error", function (error) {
             console.log("send(..) failed executing https.request(..): " + error);
-            context.done();
             reject(error);
         });
 
