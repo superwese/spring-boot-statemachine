@@ -5,21 +5,21 @@ const AWS = require('aws-sdk')
 const lambda = new AWS.Lambda({apiVersion: '2015-03-31'});
 const response = require('cfnresponse');
 
-exports.handler = function(event, context) {
+exports.handler = async function(event, context) {
     console.log("event: ", event);
+    const physicalID = event.PhysicalResourceId || "ApplyRestartPolicy-" + Math.random();
     const { ResourceProperties = {} } = event;
-    const functionArn = ResourceProperties.functionArn;
-    const statemachineArn = ResourceProperties.stateMachineArn ;
+    const functionArn = ResourceProperties.FunctionArn;
+    const statemachineArn = ResourceProperties.StateMachineArn ;
     if (event.RequestType != 'Delete') { //check if this handles Update correctly
 
         var functionParams = {
             FunctionName: functionArn,
         };
         console.log("functionParams", functionParams);
-        console.log("version", event.ResourceProperties.FunctionVersion)
-        //const func =  lambda.getFunction(functionParams).promise();
-        //const role = func.Role
-        //console.log("function:", func);
+        const func =  await lambda.getFunction(functionParams).promise();
+        const role = func.Role
+        console.log("function:", func);
 /*
         - get Role from lamda
         - createPolicy:
@@ -51,5 +51,5 @@ exports.handler = function(event, context) {
 
  */
     }
-    response.send(event, context, response.SUCCESS, {"hallo": "fertig"} );
+    return response.send(event, context, response.SUCCESS, {"hallo": "fertig"}, physicalID );
 }
