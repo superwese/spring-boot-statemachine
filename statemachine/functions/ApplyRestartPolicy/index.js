@@ -1,55 +1,51 @@
-var aws = require('aws-sdk');
-var sfn = new aws.StepFunctions();
-
-const AWS = require('aws-sdk')
+const AWS = require('aws-sdk');
+const iam = new AWS.IAM({apiVersion: '2010-05-08'});
 const lambda = new AWS.Lambda({apiVersion: '2015-03-31'});
-const response = require('cfnresponse');
+const cfnresponse = require('cfnresponse');
 
 exports.handler = async function(event, context) {
     console.log("event: ", event);
     const physicalID = event.PhysicalResourceId || "ApplyRestartPolicy-" + Math.random();
-    const { ResourceProperties = {} } = event;
+    const {ResourceProperties = {}} = event;
     const functionArn = ResourceProperties.FunctionArn;
-    const statemachineArn = ResourceProperties.StateMachineArn ;
+    const statemachineArn = ResourceProperties.StatemachineArn;
     if (event.RequestType != 'Delete') { //check if this handles Update correctly
 
         var functionParams = {
             FunctionName: functionArn,
         };
         console.log("functionParams", functionParams);
-        const func =  await lambda.getFunction(functionParams).promise();
-        const role = func.Role
+        const func = await lambda.getFunction(functionParams).promise();
         console.log("function:", func);
-/*
-        - get Role from lamda
-        - createPolicy:
-        {
+
+        const roleArn = func.Configuration.Role;
+        const resource = roleArn.split(":").pop();
+        const roleName = resource.split("/").pop();
+
+        console.log("role:", roleName);
+
+        const policyDocument = {
             "Version": "2012-10-17",
             "Statement": [
-            {
-                "Sid": "VisualEditor0",
-                "Effect": "Allow",
-                "Action": "states:StartExecution",
-                "Resource": "arn:aws:states:*:832077700054:stateMachine:*" $stateMachineArn
-            }
-        ]
-        }
-        returns policy.arn
-        - attach the policy that allows startExecution for this statemachine to that role:
-            var roleParams = {
-                PolicyArn: 'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess',
-                RoleName: process.argv[2]
-            };
-        iam.attachRolePolicy(roleParams, function(err, data) {
-            if (err) {
-                console.log("Unable to attach policy to role", err);
-            } else {
-                console.log("Role attached successfully");
-            }
-        });
+                {
+                    "Sid": "restartStatemachine",
+                    "Effect": "Allow",
+                    "Action": "states:StartExecution",
+                    "Resource": statemachineArn
+                }
+            ]
+        };
+
+        var rolePutParams = {
+            PolicyDocument: JSON.stringify(policyDocument),
+            PolicyName: "AllowStartExecution",
+            RoleName: roleName
+        };
+        console.log("putPolicyParams:", rolePutParams);
+        const createdPolicy = await iam.putRolePolicy(rolePutParams).promise();
         physicalID: "" + Math.random();
 
- */
+
     }
-    await response.send(event, context, response.SUCCESS, {"hallo": "fertig"}, physicalID );
+    await cfnresponse.send(event, context, cfnresponse.SUCCESS, {"hallo": "fertig"}, physicalID);
 }

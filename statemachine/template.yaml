@@ -88,7 +88,7 @@ Resources:
         - Version: 2012-10-17
           Statement:
             - Effect: Allow
-              Action: iam:AttachRolePolicy
+              Action: iam:PutRolePolicy
               Resource: !Join
                 - ''
                 - - 'arn:aws:iam::'
@@ -109,7 +109,7 @@ Resources:
     Type: Custom::ApplyRestartPolicy
     Properties:
       ServiceToken: !GetAtt ApplyRestartPolicyFunction.Arn
-      StatemachineArn: !GetAtt EventCreatorStateMachine.Name
+      StatemachineArn: !Ref EventCreatorStateMachine
       FunctionArn: !GetAtt RestartFunction.Arn
       FunctionVersion: !GetAtt ApplyRestartPolicyFunction.Version.Version
 
