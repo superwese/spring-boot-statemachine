@@ -21,6 +21,8 @@ Resources:
 
       Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
         - LambdaInvokePolicy:
+            FunctionName: !Ref RestartFunction
+        - LambdaInvokePolicy:
             FunctionName: !Ref IncrementFunction
         - LambdaInvokePolicy:
             FunctionName: !Ref SumFunction
@@ -69,6 +71,7 @@ Resources:
       Runtime: nodejs12.x
       Handler: index.handler
       CodeUri: functions/RestartFunction
+
 
   ApplyRestartPolicyFunction:
     Type: AWS::Serverless::Function

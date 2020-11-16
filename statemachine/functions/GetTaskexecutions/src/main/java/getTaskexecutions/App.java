@@ -19,7 +19,7 @@ public class App implements RequestHandler<Map<String, Object>, Map<String, Obje
         //     Map<String, Object>:
 
         List<String> uuids = new ArrayList<>();
-        IntStream.range(0, 500).forEach(i -> {
+        IntStream.range(0, 5).forEach(i -> {
             uuids.add(UUID.randomUUID().toString());
         });
 

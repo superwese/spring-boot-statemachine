@@ -4,19 +4,21 @@
   "States": {
     "Fill Config": {
       "Type": "Pass",
+      "Comment": "Ignored. provide these parameter to start an execution",
       "Result": {
         "tenantUuid": "DEADBEEF-0000-0000-0000-000000000000",
         "startDate": "2016-10-01T00:00:00Z",
-        "enddate": "2016-10-01T00:00:00Z"
+        "enddate": "2016-10-01T00:00:00Z",
+        "page": 0
       },
-      "ResultPath": "$",
+      "ResultPath": null,
       "Next": "Restart Config"
     },
     "Restart Config": {
       "Type": "Pass",
       "Result": {
         "StateMachineArn": "$$.StateMachine.Id",
-        "maxExecutionCount": 5000,
+        "maxExecutionCount": 10,
         "numberOfProcessedTaksExecutions": 0
       },
       "ResultPath": "$.restart",
@@ -114,7 +116,8 @@
                 "BackoffRate": 10
               }
             ],
-            "Next": "One Message Processed"
+            "Next": "One Message Processed",
+            "ResultPath": null
           },
 
           "Report Error": {
@@ -144,12 +147,13 @@
                 "BackoffRate": 10
               }
             ],
-            "Next": "One Message Processed"
+            "Next": "One Message Processed",
+            "ResultPath": null
           },
           "One Message Processed": {
             "Comment": "Bestimmt den output des Iterators",
             "Type": "Pass",
-            "Result": "$.index",
+            "InputPath": "$.index",
             "End": true
           }
         }
@@ -157,14 +161,22 @@
     },
     "Count ProcessedTaksExecutions": {
       "Type": "Task",
+      "Resource": "${IncrementFunctionArn}",
+      "InputPath": "$.iteratorOut[-1:]",
+      "ResultPath": "$.processedInThisChunk",
+      "Next": "Increase ProcessedTaksExecutions"
+    },
+    "Increase ProcessedTaksExecutions": {
+      "Type": "Task",
       "ResultPath": "$.restart.numberOfProcessedTaksExecutions",
       "Parameters": {
-        "a.$": "$.iteratorOut[-1:]",
+        "a.$": "$.processedInThisChunk",
         "b.$": "$.restart.numberOfProcessedTaksExecutions"
       },
       "Resource": "${SumFunctionArn}",
       "Next": "More Taskexecutions?"
     },
+
 
     "More Taskexecutions?": {
       "Type": "Choice",
