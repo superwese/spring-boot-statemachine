@@ -59,7 +59,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/ConvertTaskexecution
-      Handler: StockSeller.src.main.java.stockSeller.App::handleRequest
+      Handler: convertTaskexecution.App::handleRequest
       Runtime: java11
       MemorySize: 512
 
