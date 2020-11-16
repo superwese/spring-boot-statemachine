@@ -24,12 +24,12 @@ public class App implements RequestHandler<Map<String, Object>, Map<String, Obje
         });
 
         int currentPage = (int) Optional.ofNullable(event.get("page")).orElse(0);
+        Map<String, Object> result = new HashMap();
+        result.put("content", uuids);
+        result.put("last", currentPage > 2?true:false);
+        result.put("first", currentPage==0?true:false);
 
-        event.put("content", uuids);
-        event.put("last", currentPage > 2?true:false);
-        event.put("first", currentPage==0?true:false);
 
-
-        return event;
+        return result;
     }
 }
