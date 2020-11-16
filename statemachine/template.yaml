@@ -51,7 +51,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
       CodeUri: functions/GetTaskexecutions
-      Handler: stockChecker.App::handleRequest
+      Handler: getTaskexecutions.App::handleRequest
       Runtime: java11
       MemorySize: 512
 
