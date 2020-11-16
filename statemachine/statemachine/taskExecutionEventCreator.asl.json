@@ -17,7 +17,6 @@
     "Restart Config": {
       "Type": "Pass",
       "Result": {
-        "StateMachineArn": "$$.StateMachine.Id",
         "maxExecutionCount": 10,
         "numberOfProcessedTaksExecutions": 0
       },
@@ -209,6 +208,10 @@
     },
     "Restart": {
       "Type": "Task",
+      "Parameters": {
+        "StateMachineArn.$": "$$.StateMachine.Id",
+        "input.$" : "$"
+      },
       "Resource": "${RestartFunctionArn}",
       "Next": "Finish"
     },

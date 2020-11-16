@@ -2,13 +2,13 @@ var aws = require('aws-sdk');
 var sfn = new aws.StepFunctions();
 
 exports.handler = function(event, context, callback) {
+    console.log("event:\n", event);
 
-    const StateMachineArn = event.restart.StateMachineArn;
-    event.numberOfProcessedTaksExecutions = 0;
-    event = JSON.stringify(event);
+    const {StateMachineArn, input} = event;
+    input.numberOfProcessedTaksExecutions = 0;
 
     let params = {
-        input: event,
+        input: JSON.stringify(input),
         stateMachineArn: StateMachineArn
     };
 
