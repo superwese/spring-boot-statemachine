@@ -1,35 +1,30 @@
 package getTaskexecutions;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
-
-import java.util.*;
-import java.util.stream.IntStream;
-
-/**
- * Handler for requests to Lambda function.
- */
-public class App implements RequestHandler<Map<String, Object>, Map<String, Object>> {
-    private final java.util.Random rand = new Random();
-
-    public Map<String,Object> handleRequest(Map<String, Object> event, Context context) {
-        // Sample Lambda function which mocks the operation of getting a list of TaskExecutions
-        // ------
-        // returns a Map resembling the result of a paged result
-        //     Map<String, Object>:
-
-        List<String> uuids = new ArrayList<>();
-        IntStream.range(0, 5).forEach(i -> {
-            uuids.add(UUID.randomUUID().toString());
-        });
-
-        int currentPage = (int) Optional.ofNullable(event.get("page")).orElse(0);
-        Map<String, Object> result = new HashMap();
-        result.put("content", uuids);
-        result.put("last", currentPage > 2?true:false);
-        result.put("first", currentPage==0?true:false);
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.HandlerAdapter;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 
-        return result;
+@SpringBootApplication
+public class App {
+    @Bean
+    public HandlerMapping handlerMapping() {
+        return new RequestMappingHandlerMapping();
+    }
+
+    /*
+     * Create required HandlerAdapter, to avoid several default HandlerAdapter instances being created
+     */
+    @Bean
+    public HandlerAdapter handlerAdapter() {
+        return new RequestMappingHandlerAdapter();
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
     }
 }
