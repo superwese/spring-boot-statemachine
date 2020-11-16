@@ -1,5 +1,7 @@
+# How to delete a custom resource, when your Cf Stack is stuck in `update` state
+
 get the delete request from your cloudwatch logs (usually the last one)
-looks like 
+looks like (that's why it makes sense to log the incoming request)
 ```
 {
   RequestType: 'Delete',
