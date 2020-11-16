@@ -132,7 +132,7 @@
                   "S": "error"
                 },
                 "error": {
-                  "S": States.StringToJson($.error-info.Cause)
+                  "S.$": "$.error-info.Cause"
                 }
               }
             },
