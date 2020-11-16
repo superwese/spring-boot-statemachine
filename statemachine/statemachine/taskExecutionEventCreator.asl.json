@@ -81,6 +81,12 @@
               "Message.$": "$",
               "TopicArn": "${SNSTopicArn}"
             },
+            "Catch": [ {
+              "Comment": "TODO: Replace Me with something XXXXXX",
+              "ErrorEquals": ["States.ALL"],
+              "ResultPath": "$.ignoreMe",
+              "Next": "Report Success"
+            } ],
             "Next": "Report Success"
           },
           "Report Success": {
