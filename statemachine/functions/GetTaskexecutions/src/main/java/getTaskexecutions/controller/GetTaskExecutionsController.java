@@ -1,31 +1,39 @@
 package getTaskexecutions.controller;
 
-import com.amazonaws.services.lambda.runtime.Context;
+import getTaskexecutions.model.Request;
+import getTaskexecutions.model.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
+@RestController
+@EnableWebMvc
 public class GetTaskExecutionsController {
     private final java.util.Random rand = new Random();
 
-    public Map<String,Object> handleRequest(Map<String, Object> event, Context context) {
+    @RequestMapping("/")
+    public ResponseEntity<Response> handleRequest(@RequestBody Request event) {
         // Sample Lambda function which mocks the operation of getting a list of TaskExecutions
         // ------
         // returns a Map resembling the result of a paged result
         //     Map<String, Object>:
 
-        List<String> uuids = new ArrayList<>();
+        List<UUID> uuids = new ArrayList<>();
         IntStream.range(0, 5).forEach(i -> {
-            uuids.add(UUID.randomUUID().toString());
+            uuids.add(UUID.randomUUID());
         });
 
-        int currentPage = (int) Optional.ofNullable(event.get("page")).orElse(0);
-        Map<String, Object> result = new HashMap();
-        result.put("content", uuids);
-        result.put("last", currentPage > 2?true:false);
-        result.put("first", currentPage==0?true:false);
+        int currentPage = Optional.ofNullable(event.getPage()).orElse(0);
+        Response response = new Response();
+        response.setPage(event.getPage());
+        response.setLast(currentPage > 2?true:false);
+        response.setContent(uuids);
 
-
-        return result;
+        return ResponseEntity.ok(response);
     }
 }
