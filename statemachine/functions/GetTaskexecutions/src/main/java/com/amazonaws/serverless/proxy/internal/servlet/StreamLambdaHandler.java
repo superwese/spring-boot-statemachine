@@ -27,10 +27,10 @@ import java.io.OutputStream;
 
 
 public class StreamLambdaHandler implements RequestStreamHandler {
-    private Logger log = LoggerFactory.getLogger(StreamLambdaHandler.class);
+    private final Logger log = LoggerFactory.getLogger(StreamLambdaHandler.class);
     private static SpringBootLambdaContainerHandler<LambdaProxyRequest, AwsHttpServletResponse> handler;
 
-    private static ObjectMapper objectMapper = new ObjectMapper()
+    private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
     ;
