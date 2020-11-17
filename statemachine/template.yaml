@@ -55,7 +55,8 @@ Resources:
       CodeUri: functions/GetTaskexecutions
       Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler::handleRequest
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 768
+      Timeout: 900
 
   ConvertTaskExecutionFunction:
     Type: AWS::Serverless::Function
