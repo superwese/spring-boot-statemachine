@@ -20,8 +20,8 @@ public class GetTaskExecutionsController {
     public ResponseEntity<Response> handleRequest(@RequestBody Request event) {
         // Sample Lambda function which mocks the operation of getting a list of TaskExecutions
         // ------
-        // returns a Map resembling the result of a paged result
-        //     Map<String, Object>:
+        // returns a Response resembling the result of a paged result
+        //
 
         List<UUID> uuids = new ArrayList<>();
         IntStream.range(0, 5).forEach(i -> {
