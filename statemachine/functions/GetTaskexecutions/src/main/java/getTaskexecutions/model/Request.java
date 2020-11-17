@@ -29,4 +29,35 @@ public class Request {
     private Instant endDate;
     private int page;
 
+    public UUID getTenantUuid() {
+        return tenantUuid;
+    }
+
+    public void setTenantUuid(UUID tenantUuid) {
+        this.tenantUuid = tenantUuid;
+    }
+
+    public Instant getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Instant startDate) {
+        this.startDate = startDate;
+    }
+
+    public Instant getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Instant endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
 }
