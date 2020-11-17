@@ -1,31 +1,38 @@
 package getTaskexecutions;
 
 import getTaskexecutions.controller.GetTaskExecutionsController;
-import org.junit.Ignore;
+import getTaskexecutions.model.Request;
+import getTaskexecutions.model.Response;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class AppTest {
 
     @Test
-    @Ignore
     public void successfulResponse() {
         GetTaskExecutionsController app = new GetTaskExecutionsController();
 
 
-        Map<String, Object> event = new HashMap<>();
-        event.put("page", 0);
-        event.put("tenantUuid", "DEADBEEF-0000-0000-0000-000000000000");
-        event.put("startDate", "2016-10-01T00:00:00Z");
-        event.put("enddate", "2016-10-01T00:00:00Z");
+        Request event = new Request();
+        event.setPage(13);
+        event.setStartDate(Instant.now());
+        event.setEndDate(Instant.now().plus(10, ChronoUnit.HOURS));
+        event.setTenantUuid(UUID.randomUUID());
 
-         Map<String, Object> result = app.handleRequest(event, null);
+        ResponseEntity<Response> response = app.handleRequest(event);
 
-        assertTrue(result.get("content") != null);
+        assertTrue(response.getStatusCode() == HttpStatus.OK);
+
+        assertThat(response.getBody().getPage(), is(13));
 
     }
 }
