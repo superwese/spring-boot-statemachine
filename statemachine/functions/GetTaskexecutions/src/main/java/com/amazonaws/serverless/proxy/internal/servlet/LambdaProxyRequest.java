@@ -82,7 +82,7 @@ public class LambdaProxyRequest<T> extends AwsHttpServletRequest {
 
     @Override
     public String getMethod() {
-        return "GET";
+        return "LAMBDA";
     }
 
     @Override
