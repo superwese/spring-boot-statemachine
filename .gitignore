@@ -30,3 +30,4 @@ app/dist
 /.nb-gradle/
 .aws-sam/
 build/
+out/

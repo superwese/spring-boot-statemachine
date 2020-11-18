@@ -53,9 +53,10 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
       CodeUri: functions/GetTaskexecutions
-      Handler: getTaskexecutions.App::handleRequest
+      Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler::handleRequest
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 768
+      Timeout: 900
 
   ConvertTaskExecutionFunction:
     Type: AWS::Serverless::Function
