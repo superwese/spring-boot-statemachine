@@ -14,14 +14,14 @@ import java.util.*;
 
 /**
  * minimale Implementierung eines HttpServletRequest
- * @param <T>
+ * @param <T> type of the payload it carries
  */
 
 public class LambdaProxyRequest<T> extends AwsHttpServletRequest {
     private Context lambdaContext;
+    // may remove this, it's not really needed or it should be the base for inputstream, contentType ...
     private T payload;
-    private String requestUri;
-    private int contentLength;
+    private final static String requestUri = "/";
 
     public LambdaProxyRequest(Context lambdaContext, T payload) {
         super(lambdaContext);
@@ -131,10 +131,6 @@ public class LambdaProxyRequest<T> extends AwsHttpServletRequest {
         return requestUri;
     }
 
-    public void setRequestUri(String requestUri) {
-        this.requestUri = requestUri;
-    }
-
     @Override
     public StringBuffer getRequestURL() {
         return null;
@@ -206,7 +202,7 @@ public class LambdaProxyRequest<T> extends AwsHttpServletRequest {
     }
 
     @Override
-    public <T extends HttpUpgradeHandler> T upgrade(Class<T> aClass) throws IOException, ServletException {
+    public <H extends HttpUpgradeHandler> H upgrade(Class<H> aClass) throws IOException, ServletException {
         return null;
     }
 
@@ -223,7 +219,7 @@ public class LambdaProxyRequest<T> extends AwsHttpServletRequest {
 
     @Override
     public int getContentLength() {
-        return contentLength;
+        return -1;
     }
 
     @Override
@@ -382,7 +378,4 @@ public class LambdaProxyRequest<T> extends AwsHttpServletRequest {
 
     }
 
-    public void setContentLength(int contentLength) {
-        this.contentLength = contentLength;
-    }
 }

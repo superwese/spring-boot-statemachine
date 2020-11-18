@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 public class GetTaskExecutionsController {
     private final java.util.Random rand = new Random();
 
-    @RequestMapping("/")
+    @RequestMapping("*")
     public ResponseEntity<Response> handleRequest(@RequestBody Request event) {
         // Sample Lambda function which mocks the operation of getting a list of TaskExecutions
         // ------

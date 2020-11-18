@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +32,6 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
-    ;
 
     static {
         try {
@@ -83,11 +81,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
             Request request = objectMapper.readValue(input, Request.class);
             input.reset();
             LambdaProxyRequest<Request> proxyRequest = new LambdaProxyRequest<>(context, request);
-            int contentLength = ((ByteArrayInputStream) input).available();
-            proxyRequest.setContentLength(contentLength);
             proxyRequest.setInputStream(input);
-            proxyRequest.setRequestUri("/");
-
 
             AwsHttpServletResponse response = handler.proxy(proxyRequest, context);
 
