@@ -11,6 +11,7 @@ import getTaskexecutions.model.Response;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,6 +24,7 @@ import java.util.UUID;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
+@ActiveProfiles({"test"})
 public class AppTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
@@ -69,6 +71,5 @@ public class AppTest {
 
         assertEquals(request.getPage(), response.getPage());
         assertTrue(response.isLast());
-
     }
 }
