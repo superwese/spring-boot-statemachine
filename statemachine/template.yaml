@@ -5,6 +5,60 @@ Description: >
 
   Sample SAM Template for createEvents
 
+Mappings:
+  StageMapping:
+    int:
+      Prefix: "I-"
+      PrefixLowercase: "i-"
+      SubDomain: "i."
+      Postfix: "-i"
+      ValueUppercase: "Integration"
+    qs:
+      Prefix: "Q-"
+      PrefixLowercase: "q-"
+      SubDomain: "qs."
+      Postfix: "-q"
+      ValueUppercase: "QS"
+    prod:
+      Prefix: "P-"
+      PrefixLowercase: "p-"
+      SubDomain: ""
+      Postfix: "-p"
+      ValueUppercase: "Production"
+Globals:
+  Function:
+    Runtime: java11
+    Timeout: 60
+    MemorySize: 768
+    Environment:
+      Variables:
+        SPRING_PROFILES_ACTIVE: !Ref SpringProfilesActive
+        RDS_HOSTNAME: !Ref RdsHostname
+        RDS_PORT: !Ref RdsPort
+        RDS_USERNAME: root
+        RDS_PASSWORD: !GetAtt DecryptedDatabasePassword.PlainText
+    VpcConfig:
+      #change me for production, see correctManualInput template
+      SecurityGroupIds:
+        - sg-fa789592
+      SubnetIds:
+        - !ImportValue DefaultVpcSubnetTwoId
+        - !ImportValue DefaultVpcSubnetOneId
+Parameters:
+  RdsPort:
+    Type: String
+    Default: 3306
+  RdsHostname:
+    Type: String
+  SpringProfilesActive:
+    Type: String
+  Stage:
+    Type: String
+    Default: int
+  EncryptedDatabasePassword:
+    Type: String
+    Description: Database admin account password
+
 Resources:
   EventCreatorStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
@@ -73,7 +127,6 @@ Resources:
       Handler: index.handler
       CodeUri: functions/RestartFunction
 
-
   ApplyRestartPolicyFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -116,6 +169,11 @@ Resources:
       StatemachineArn: !Ref EventCreatorStateMachine
       FunctionArn: !GetAtt RestartFunction.Arn
       FunctionVersion: !GetAtt ApplyRestartPolicyFunction.Version.Version
+  DecryptedDatabasePassword:
+    Type: Custom::Decrypt
+    Properties:
+      ServiceToken: !ImportValue 'ConfigSecretsDecryptFunctionArn'
+      CiphertextBlob: !Ref 'EncryptedDatabasePassword'
 
 Outputs:
   EventCreatorStateMachineArn:
