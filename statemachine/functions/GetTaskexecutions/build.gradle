@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
 
 }
 sourceCompatibility = 1.11
@@ -19,7 +20,9 @@ dependencies {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.5.2'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE'
+    implementation('io.symphonia:lambda-logging:1.0.1')
+    implementation 'mysql:mysql-connector-java:8.0.22'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE'
