@@ -81,7 +81,6 @@ Resources:
         DDBPutItem: !Sub arn:${AWS::Partition}:states:::dynamodb:putItem
         DDBTable: !Ref TransactionTable
         SNSTopicArn: !Ref SNSTopic
-
       Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
         - LambdaInvokePolicy:
             FunctionName: !Ref RestartFunction
@@ -97,6 +96,16 @@ Resources:
             TableName: !Ref TransactionTable
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicName
+        - CloudWatchLogsFullAccess
+      Logging:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn: !GetAtt StatemachineLogs.Arn
+        IncludeExecutionData: false
+        Level: ERROR
+
+  StatemachineLogs:
+    Type: AWS::Logs::LogGroup
 
   IncrementFunction:
     Type: AWS::Serverless::Function
