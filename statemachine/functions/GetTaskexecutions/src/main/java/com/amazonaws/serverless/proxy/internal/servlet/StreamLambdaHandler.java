@@ -5,6 +5,7 @@ import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.AsyncInitializationWrapper;
 import com.amazonaws.serverless.proxy.ExceptionHandler;
 import com.amazonaws.serverless.proxy.SecurityContextWriter;
+import com.amazonaws.serverless.proxy.internal.LambdaContainerHandler;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
@@ -35,6 +36,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
 
     static {
         try {
+            LambdaContainerHandler.getContainerConfig().setInitializationTimeout(60_000);
             AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
             applicationContext.register(App.class);
 
