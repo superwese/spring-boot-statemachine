@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TaskExecution implements Serializable {
+public class TaskExecutionEventPayload implements Serializable {
 
     private UUID uuid;
 

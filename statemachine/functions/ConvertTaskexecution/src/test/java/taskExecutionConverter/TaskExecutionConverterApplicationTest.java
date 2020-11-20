@@ -7,7 +7,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import taskExecutionConverter.controller.TaskExecutionConverterController;
 import taskExecutionConverter.model.Request;
-import taskExecutionConverter.model.TaskExecution;
+import taskExecutionConverter.model.TaskExecutionEventPayload;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ public class TaskExecutionConverterApplicationTest {
         Request request = new Request();
         request.setTaskExecutionUuid(UUID.randomUUID());
 
-        ResponseEntity<TaskExecution> response = taskExecutionConverterController.pushTaskExecutionToSnsFor(request);
+        ResponseEntity<TaskExecutionEventPayload> response = taskExecutionConverterController.pushTaskExecutionToSnsFor(request);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody().getTaskUuid(), is(request.getTaskExecutionUuid()));
@@ -52,7 +52,7 @@ public class TaskExecutionConverterApplicationTest {
         StreamLambdaHandler handler = new StreamLambdaHandler();
         handler.handleRequest(inputStream, outputStream, context);
 
-        TaskExecution response = objectMapper.readValue(outputStream.toByteArray(), TaskExecution.class);
+        TaskExecutionEventPayload response = objectMapper.readValue(outputStream.toByteArray(), TaskExecutionEventPayload.class);
 
         assertThat(request.getTaskExecutionUuid(), is(response.getTaskUuid()));
     }

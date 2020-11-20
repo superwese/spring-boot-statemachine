@@ -1,7 +1,7 @@
 package taskExecutionConverter.controller;
 
 import taskExecutionConverter.model.Request;
-import taskExecutionConverter.model.TaskExecution;
+import taskExecutionConverter.model.TaskExecutionEventPayload;
 import taskExecutionConverter.model.ViolationLevelType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,18 +18,18 @@ import java.util.UUID;
 public class TaskExecutionConverterController {
 
     @RequestMapping("*")
-    public ResponseEntity<TaskExecution> pushTaskExecutionToSnsFor(@RequestBody Request request) {
-        TaskExecution taskExecution = new TaskExecution();
-        taskExecution.setUuid(UUID.randomUUID());
-        taskExecution.setTaskUuid(request.getTaskExecutionUuid());
-        taskExecution.setRootProcessControlUuid(UUID.randomUUID());
-        taskExecution.setRootQualityManualUuid(UUID.randomUUID());
-        taskExecution.setShiftEnd(OffsetDateTime.now().plus(2, ChronoUnit.HOURS));
-        taskExecution.setShiftStart(OffsetDateTime.now().minus(1L, ChronoUnit.HOURS));
-        taskExecution.setTenantUuid(UUID.randomUUID());
-        taskExecution.setTimestampStart(OffsetDateTime.now());
-        taskExecution.setViolationLevelAggregated(ViolationLevelType.okplusca);
+    public ResponseEntity<TaskExecutionEventPayload> pushTaskExecutionToSnsFor(@RequestBody Request request) {
+        TaskExecutionEventPayload taskExecutionEventPayload = new TaskExecutionEventPayload();
+        taskExecutionEventPayload.setUuid(UUID.randomUUID());
+        taskExecutionEventPayload.setTaskUuid(request.getTaskExecutionUuid());
+        taskExecutionEventPayload.setRootProcessControlUuid(UUID.randomUUID());
+        taskExecutionEventPayload.setRootQualityManualUuid(UUID.randomUUID());
+        taskExecutionEventPayload.setShiftEnd(OffsetDateTime.now().plus(2, ChronoUnit.HOURS));
+        taskExecutionEventPayload.setShiftStart(OffsetDateTime.now().minus(1L, ChronoUnit.HOURS));
+        taskExecutionEventPayload.setTenantUuid(UUID.randomUUID());
+        taskExecutionEventPayload.setTimestampStart(OffsetDateTime.now());
+        taskExecutionEventPayload.setViolationLevelAggregated(ViolationLevelType.okplusca);
 
-        return ResponseEntity.ok(taskExecution);
+        return ResponseEntity.ok(taskExecutionEventPayload);
     }
 }
