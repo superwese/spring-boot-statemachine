@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 public class GetTaskExecutionsController {
     private final static int pageSize = 10;
 
-    @Autowired
     TaskExecutionRepository taskExecutionRepository;
 
+    public GetTaskExecutionsController(@Autowired TaskExecutionRepository taskExecutionRepository) {
+        this.taskExecutionRepository = taskExecutionRepository;
+    }
 
     @RequestMapping("*")
     public ResponseEntity<Response> handleRequest(@RequestBody Request event) {
-        // Sample Lambda function which mocks the operation of getting a list of TaskExecutions
-        // ------
         // returns a Response resembling the result of a paged result
         //
         int currentPage = Optional.ofNullable(event.getPage()).orElse(0);
