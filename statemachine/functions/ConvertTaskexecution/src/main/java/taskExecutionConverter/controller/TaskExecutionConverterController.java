@@ -18,7 +18,7 @@ import java.util.UUID;
 public class TaskExecutionConverterController {
 
     @RequestMapping("*")
-    public ResponseEntity<TaskExecutionEventPayload> pushTaskExecutionToSnsFor(@RequestBody Request request) {
+    public ResponseEntity<TaskExecutionEventPayload> getTaskExecutionEventPayloadFor(@RequestBody Request request) {
         TaskExecutionEventPayload taskExecutionEventPayload = new TaskExecutionEventPayload();
         taskExecutionEventPayload.setUuid(UUID.randomUUID());
         taskExecutionEventPayload.setTaskUuid(request.getTaskExecutionUuid());

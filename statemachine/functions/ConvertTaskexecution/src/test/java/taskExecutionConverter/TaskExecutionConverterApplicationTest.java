@@ -34,7 +34,7 @@ public class TaskExecutionConverterApplicationTest {
         Request request = new Request();
         request.setTaskExecutionUuid(UUID.randomUUID());
 
-        ResponseEntity<TaskExecutionEventPayload> response = taskExecutionConverterController.pushTaskExecutionToSnsFor(request);
+        ResponseEntity<TaskExecutionEventPayload> response = taskExecutionConverterController.getTaskExecutionEventPayloadFor(request);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody().getTaskUuid(), is(request.getTaskExecutionUuid()));
