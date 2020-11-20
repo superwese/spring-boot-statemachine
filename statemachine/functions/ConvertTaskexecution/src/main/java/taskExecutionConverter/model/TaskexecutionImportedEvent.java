@@ -1,4 +1,4 @@
-package convertTaskexecution;
+package taskExecutionConverter.model;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

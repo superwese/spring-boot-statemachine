@@ -1,12 +1,38 @@
 plugins {
     id 'java'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+
 }
 sourceCompatibility = 1.11
 targetCompatibility = 1.11
 repositories {
     mavenCentral()
 }
+
 dependencies {
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.0'
-    testImplementation 'junit:junit:4.13.1'
+    runtime(
+            "com.amazonaws:aws-lambda-java-events:3.2.0",
+            "com.amazonaws:aws-lambda-java-core:1.2.1"
+    )
+
+    implementation('org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.5.2'
+
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE'
 }
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from(configurations.compileClasspath) {
+            exclude 'tomcat-embed-*'
+        }
+    }
+}
+
+build.dependsOn buildZip
