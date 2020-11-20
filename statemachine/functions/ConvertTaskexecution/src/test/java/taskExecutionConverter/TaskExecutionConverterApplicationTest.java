@@ -1,13 +1,13 @@
-package convertTaskexecution;
+package taskExecutionConverter;
 
 import com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import convertTaskexecution.controller.ConvertTaskexecutionController;
-import convertTaskexecution.model.Request;
-import convertTaskexecution.model.TaskExecution;
+import taskExecutionConverter.controller.TaskExecutionConverterController;
+import taskExecutionConverter.model.Request;
+import taskExecutionConverter.model.TaskExecution;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class AppTest {
+public class TaskExecutionConverterApplicationTest {
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
@@ -29,12 +29,12 @@ public class AppTest {
 
     @Test
     public void testController() {
-        ConvertTaskexecutionController convertTaskexecutionController = new ConvertTaskexecutionController();
+        TaskExecutionConverterController taskExecutionConverterController = new TaskExecutionConverterController();
 
         Request request = new Request();
         request.setTaskExecutionUuid(UUID.randomUUID());
 
-        ResponseEntity<TaskExecution> response = convertTaskexecutionController.pushTaskExecutionToSnsFor(request);
+        ResponseEntity<TaskExecution> response = taskExecutionConverterController.pushTaskExecutionToSnsFor(request);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody().getTaskUuid(), is(request.getTaskExecutionUuid()));

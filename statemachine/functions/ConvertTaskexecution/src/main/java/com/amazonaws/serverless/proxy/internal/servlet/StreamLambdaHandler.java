@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import convertTaskexecution.App;
-import convertTaskexecution.model.Request;
+import taskExecutionConverter.TaskExecutionConverterApplication;
+import taskExecutionConverter.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -35,7 +35,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     static {
         try {
             AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
-            applicationContext.register(App.class);
+            applicationContext.register(TaskExecutionConverterApplication.class);
 
             handler = new SpringBootLambdaContainerHandler<LambdaProxyRequest, AwsHttpServletResponse>(
                     LambdaProxyRequest.class,
@@ -54,7 +54,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
                         @Override
                         public void handle(Throwable ex, OutputStream stream) throws IOException {}
                     },
-                    App.class,
+                    TaskExecutionConverterApplication.class,
                     new AsyncInitializationWrapper(),
                     WebApplicationType.SERVLET
             );

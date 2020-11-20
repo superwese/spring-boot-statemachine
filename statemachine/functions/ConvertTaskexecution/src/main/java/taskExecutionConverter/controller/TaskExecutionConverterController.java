@@ -1,8 +1,8 @@
-package convertTaskexecution.controller;
+package taskExecutionConverter.controller;
 
-import convertTaskexecution.model.Request;
-import convertTaskexecution.model.TaskExecution;
-import convertTaskexecution.model.ViolationLevelType;
+import taskExecutionConverter.model.Request;
+import taskExecutionConverter.model.TaskExecution;
+import taskExecutionConverter.model.ViolationLevelType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @EnableWebMvc
-public class ConvertTaskexecutionController {
+public class TaskExecutionConverterController {
 
     @RequestMapping("*")
     public ResponseEntity<TaskExecution> pushTaskExecutionToSnsFor(@RequestBody Request request) {
