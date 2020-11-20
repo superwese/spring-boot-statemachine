@@ -22,9 +22,9 @@ dependencies {
     implementation('io.symphonia:lambda-logging:1.0.1')
     implementation 'mysql:mysql-connector-java:8.0.22'
     // JAX-B dependencies for JDK 9+
-    implementation("javax.xml.bind:jaxb-api:2.2.11")
-    implementation "com.sun.xml.bind:jaxb-core:2.2.11"
-    implementation "com.sun.xml.bind:jaxb-impl:2.2.11"
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation "com.sun.xml.bind:jaxb-core:2.3.0"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.1"
     implementation "javax.activation:activation:1.1.1"
     // dependencies from SDS:
     implementation 'org.apache.commons:commons-lang3:3.9'
