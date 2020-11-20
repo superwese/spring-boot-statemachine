@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import getTaskexecutions.controller.GetTaskExecutionsController;
 import getTaskexecutions.model.Request;
 import getTaskexecutions.model.Response;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class AppTest {
     private final static MockLambdaContext context = new MockLambdaContext();
 
     @Test
+    @Ignore
     public void testController() {
         GetTaskExecutionsController controller = new GetTaskExecutionsController();
 
