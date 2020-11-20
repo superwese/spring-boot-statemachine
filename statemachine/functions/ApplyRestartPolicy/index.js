@@ -45,7 +45,7 @@ exports.handler = async function(event, context) {
         const createdPolicy = await iam.putRolePolicy(rolePutParams).promise();
         physicalID: "" + Math.random();
 
-
+        //force update: 1
     }
     await cfnresponse.send(event, context, cfnresponse.SUCCESS, {"hallo": "fertig"}, physicalID);
 }

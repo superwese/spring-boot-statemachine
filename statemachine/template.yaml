@@ -124,6 +124,8 @@ Resources:
       Runtime: nodejs12.x
       Handler: index.handler
       CodeUri: functions/RestartFunction
+      VpcConfig: !Ref AWS::NoValue
+      AutoPublishAlias: live
 
   ApplyRestartPolicyFunction:
     Type: AWS::Serverless::Function
@@ -131,6 +133,7 @@ Resources:
       Runtime: nodejs12.x
       Handler: index.handler
       CodeUri: functions/ApplyRestartPolicy
+      VpcConfig: !Ref AWS::NoValue
       AutoPublishAlias: live
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -168,6 +171,7 @@ Resources:
       StatemachineArn: !Ref EventCreatorStateMachine
       FunctionArn: !GetAtt RestartFunction.Arn
       FunctionVersion: !GetAtt ApplyRestartPolicyFunction.Version.Version
+      RestartVersion: !GetAtt RestartFunction.Version.Version
   DecryptedDatabasePassword:
     Type: Custom::Decrypt
     Properties:

@@ -3,7 +3,7 @@ var sfn = new aws.StepFunctions();
 
 exports.handler = function(event, context, callback) {
     console.log("event:\n", event);
-
+    //force version
     const {StateMachineArn, input} = event;
     input.numberOfProcessedTaksExecutions = 0;
 
