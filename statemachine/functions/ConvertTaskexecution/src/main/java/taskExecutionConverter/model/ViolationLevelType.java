@@ -1,4 +1,4 @@
-package convertTaskexecution.model;
+package taskExecutionConverter.model;
 
 public enum ViolationLevelType {
 
