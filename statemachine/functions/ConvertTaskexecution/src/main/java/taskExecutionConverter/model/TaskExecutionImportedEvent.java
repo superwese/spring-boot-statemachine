@@ -3,7 +3,7 @@ package taskExecutionConverter.model;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public class TaskexecutionImportedEvent {
+public class TaskExecutionImportedEvent {
 
     private UUID uuid;
 
