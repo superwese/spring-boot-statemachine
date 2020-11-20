@@ -5,12 +5,17 @@ import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import taskExecutionConverter.controller.TaskExecutionConverterController;
 import taskExecutionConverter.model.Request;
 import taskExecutionConverter.model.TaskExecutionEventPayload;
-import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import taskExecutionConverter.service.TaskExecutionConverterService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +26,13 @@ import java.util.UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TaskExecutionConverterApplicationTest {
+
+    @Autowired
+    private TaskExecutionConverterController taskExecutionConverterController;
+
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
@@ -29,8 +40,6 @@ public class TaskExecutionConverterApplicationTest {
 
     @Test
     public void testController() {
-        TaskExecutionConverterController taskExecutionConverterController = new TaskExecutionConverterController();
-
         Request request = new Request();
         request.setTaskExecutionUuid(UUID.randomUUID());
 
