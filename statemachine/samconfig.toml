@@ -13,7 +13,7 @@ capabilities = "CAPABILITY_IAM"
 parameter_overrides = [
     "Stage=play",
     "SpringProfilesActive=playground",
-    "RdsHostname=sample-data-playground.cqhlntyng9ns.eu-central-1.rds.amazonaws.com",
+    "RdsHostname=sample-data-i-2020-10-21-playground.cqhlntyng9ns.eu-central-1.rds.amazonaws.com",
     "RdsPort=3306",
     "EncryptedDatabasePassword=AQECAHjigSYknVYELGGhaOpoBtVYHCgDZEeRlnwwkxqWmiq16QAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPg1RY8tTn3+XgjpLwIBEIArGeLYsF+HAQ7lf3Q4LGu56byfFXF2fHjk2I3WM6/d+svTqGCJpHV1KTTeRA=="
     ]

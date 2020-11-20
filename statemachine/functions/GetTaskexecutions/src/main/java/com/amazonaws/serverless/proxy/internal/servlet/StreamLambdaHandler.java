@@ -41,8 +41,8 @@ public class StreamLambdaHandler implements RequestStreamHandler {
             handler = new SpringBootLambdaContainerHandler<LambdaProxyRequest, AwsHttpServletResponse>(
                     LambdaProxyRequest.class,
                     AwsHttpServletResponse.class,
-                    new TaskexecutionsRequestReader(),
-                    new TaskexecutionsResponseWriter(),
+                    new TaskExecutionsRequestReader(),
+                    new TaskExecutionsResponseWriter(),
                     // Obviously, you can create custom implementations of
                     // these objects too.
                     (SecurityContextWriter) (event, lambdaContext) -> null,

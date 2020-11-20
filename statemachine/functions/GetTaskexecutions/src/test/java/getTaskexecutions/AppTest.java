@@ -8,9 +8,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import getTaskexecutions.controller.GetTaskExecutionsController;
 import getTaskexecutions.model.Request;
 import getTaskexecutions.model.Response;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,6 +28,9 @@ import java.util.UUID;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ActiveProfiles({"test"})
 public class AppTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
@@ -30,10 +38,11 @@ public class AppTest {
             .registerModule(new JavaTimeModule());
     private final static MockLambdaContext context = new MockLambdaContext();
 
+    @Autowired
+    private GetTaskExecutionsController getTaskExecutionsController;
+
     @Test
     public void testController() {
-        GetTaskExecutionsController controller = new GetTaskExecutionsController();
-
 
         Request event = new Request();
         event.setPage(13);
@@ -41,7 +50,7 @@ public class AppTest {
         event.setEndDate(Instant.now().plus(10, ChronoUnit.HOURS));
         event.setTenantUuid(UUID.randomUUID());
 
-        ResponseEntity<Response> response = controller.handleRequest(event);
+        ResponseEntity<Response> response = getTaskExecutionsController.handleRequest(event);
 
         assertTrue(response.getStatusCode() == HttpStatus.OK);
 
@@ -69,6 +78,5 @@ public class AppTest {
 
         assertEquals(request.getPage(), response.getPage());
         assertTrue(response.isLast());
-
     }
 }

@@ -1,12 +1,14 @@
 plugins {
     id 'java'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-
 }
 sourceCompatibility = 1.11
 targetCompatibility = 1.11
 repositories {
     mavenCentral()
+}
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
@@ -19,10 +21,24 @@ dependencies {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.5.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE'
+    implementation('io.symphonia:lambda-logging:1.0.1')
+    implementation 'mysql:mysql-connector-java:8.0.22'
+    // JAX-B dependencies for JDK 9+
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation "com.sun.xml.bind:jaxb-core:2.3.0"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.1"
+    implementation "javax.activation:activation:1.1.1"
+    // dependencies from SDS:
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'com.google.guava:guava:28.0-jre'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.11.3'
 
-
-    testImplementation 'junit:junit:4.12'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.0'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.7.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE'
+    testImplementation 'com.h2database:h2:1.4.200'
 }
 
 task buildZip(type: Zip) {
