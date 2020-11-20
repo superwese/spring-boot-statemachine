@@ -58,6 +58,14 @@ Parameters:
   EncryptedDatabasePassword:
     Type: String
     Description: Database admin account password
+  SNSTopic:
+    Type: String
+    Description: The Arn(!) of the Topic to publish to
+    Default: arn:aws:sns:eu-central-1:832077700054:CreateTaskExecutionCreatedEvents_TestTopic
+  SNSTopicName:
+    Type: String
+    Description: The the of the Topic to publish to ( required by the policy )
+    Default: CreateTaskExecutionCreatedEvents_TestTopic
 
 Resources:
   EventCreatorStateMachine:
@@ -72,6 +80,7 @@ Resources:
         RestartFunctionArn: !GetAtt RestartFunction.Arn
         DDBPutItem: !Sub arn:${AWS::Partition}:states:::dynamodb:putItem
         DDBTable: !Ref TransactionTable
+        SNSTopicArn: !Ref SNSTopic
 
       Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
         - LambdaInvokePolicy:
@@ -86,6 +95,8 @@ Resources:
             FunctionName: !Ref GetTaskExecutionsFunction
         - DynamoDBWritePolicy:
             TableName: !Ref TransactionTable
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref SNSTopicName
 
   IncrementFunction:
     Type: AWS::Serverless::Function

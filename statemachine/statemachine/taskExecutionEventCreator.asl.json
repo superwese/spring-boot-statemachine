@@ -54,10 +54,10 @@
             "Type": "Task",
             "Comment": "fetches one te from DB, serializes it to an TaskExecutionCreatedEvent DAO, saves it to S3 Bucket(?) and returns the arn/url",
             "Resource": "${ConvertTaskExecutionFunctionArn}",
-            "ResultPath": "$.s3Location",
+            "ResultPath": "$.messagePayload",
             "Retry": [ {
               "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException" ],
-              "IntervalSeconds": 2,
+              "IntervalSeconds": 5,
               "MaxAttempts": 6,
               "BackoffRate": 2
             } ],
@@ -74,21 +74,32 @@
             "Resource": "arn:aws:states:::sns:publish",
             "Parameters": {
               "MessageAttributes": {
-                "S3Location": {
+                "TriggeredBy": {
                   "DataType": "String",
-                  "StringValue": "$.s3Location"
+                  "StringValue": "statemachine"
+                },
+                "ExecutionId" : {
+                  "DataType": "String",
+                  "StringValue.$": "$$.Execution.Id"
                 }
               },
-              "Subject": "New Taskexecution",
-              "Message.$": "$",
+              "Subject": "TASK_EXECUTION_IMPORTED",
+              "Message.$": "$.messagePayload",
               "TopicArn": "${SNSTopicArn}"
             },
+            "Retry": [ {
+              "ErrorEquals": [ "States.ALL" ],
+              "IntervalSeconds": 5,
+              "MaxAttempts": 6,
+              "BackoffRate": 2
+            } ],
             "Catch": [ {
               "Comment": "TODO: Replace Me with something XXXXXX",
               "ErrorEquals": ["States.ALL"],
-              "ResultPath": "$.ignoreMe",
-              "Next": "Report Success"
+              "ResultPath": "$.error-info",
+              "Next": "Report Error"
             } ],
+            "ResultPath": "$.publishResult",
             "Next": "Report Success"
           },
           "Report Success": {
