@@ -17,7 +17,7 @@
     "Restart Config": {
       "Type": "Pass",
       "Result": {
-        "maxExecutionCount": 10,
+        "maxExecutionCount": 100,
         "numberOfProcessedTaksExecutions": 0
       },
       "ResultPath": "$.restart",
