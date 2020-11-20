@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @EnableWebMvc
 public class GetTaskExecutionsController {
-    private final static int pageSize = 10;
+    private final static int pageSize = 100;
 
     TaskExecutionRepository taskExecutionRepository;
 
