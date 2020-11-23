@@ -1,7 +1,7 @@
 @Library(['deployment-tracking']) _
 pipeline {
         agent {
-            docker 'docker.cloud-mobile.testo250.net/ci-docker-sam-cli-java11:1.7.0'
+            docker 'docker.cloud-mobile.testo250.net/ci-docker-sam-cli-java11:1.11.0'
         }
 
         options {
@@ -33,7 +33,7 @@ pipeline {
                     steps {
                         dir('statemachine') {
                             wrap([$class: 'AnsiColorBuildWrapper']) {
-                                sh "sam build"
+                                sh "sam build --parallel"
                             }
                         }
                     }

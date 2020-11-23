@@ -39,13 +39,8 @@ Globals:
         RDS_PASSWORD: !GetAtt DecryptedDatabasePassword.PlainText
     VpcConfig:
       SecurityGroupIds:
-        - Fn::ImportValue:
-            'Fn::Sub':
-              - ${StagePrefix}FargateContainerSecurityGroup
-              - StagePrefix: !FindInMap
-                  - StageMapping
-                  - !Ref 'Stage'
-                  - Prefix
+        - Fn::ImportValue: P-FargateContainerSecurityGroup
+
       SubnetIds:
         - !ImportValue SavR-PrivateSubnetA
         - !ImportValue SavR-PrivateSubnetB
