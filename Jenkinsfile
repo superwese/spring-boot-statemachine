@@ -1,6 +1,5 @@
 @Library(['deployment-tracking']) _
 pipeline {
-    dir('statemachine') {
         agent {
             docker 'docker.cloud-mobile.testo250.net/ci-docker-sam-cli-java11:1.7.0'
         }
@@ -16,37 +15,39 @@ pipeline {
         }
 
         stages {
-            stage('Check templates') {
-                steps {
-                    withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
-                        wrap([$class: 'AnsiColorBuildWrapper']) {
-                            sh 'sam validate'
+            dir('statemachine') {
+
+                stage('Check templates') {
+                    steps {
+                        withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                            wrap([$class: 'AnsiColorBuildWrapper']) {
+                                sh 'sam validate'
+                            }
                         }
                     }
                 }
-            }
 
-            stage('Compile & Test') {
-                steps {
-                    wrap([$class: 'AnsiColorBuildWrapper']) {
-                        sh "sam build"
-                    }
-                }
-            }
-
-            stage('Deploy Integration') {
-                when {
-                    branch 'master'
-                }
-                steps {
-                    withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                stage('Compile & Test') {
+                    steps {
                         wrap([$class: 'AnsiColorBuildWrapper']) {
-                            sh "sam --version"
-                            sh "sam deploy --no-progressbar --config-env integration"
+                            sh "sam build"
                         }
                     }
                 }
-            }
+
+                stage('Deploy Integration') {
+                    when {
+                        branch 'master'
+                    }
+                    steps {
+                        withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                            wrap([$class: 'AnsiColorBuildWrapper']) {
+                                sh "sam --version"
+                                sh "sam deploy --no-progressbar --config-env integration"
+                            }
+                        }
+                    }
+                }
 /*
             stage('Proceed') {
                 when {
@@ -106,6 +107,7 @@ pipeline {
             }
 
  */
+            }
         }
-    }
+
 }
