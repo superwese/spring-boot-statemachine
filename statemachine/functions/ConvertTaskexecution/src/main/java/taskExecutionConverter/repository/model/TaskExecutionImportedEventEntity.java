@@ -22,9 +22,6 @@ public class TaskExecutionImportedEventEntity extends JpaEntity implements Seria
     @Column(name = "uuid", nullable = false, insertable = true, updatable = false)
     private UUID uuid;
 
-    @Column(name = "task_uuid", nullable = false, insertable = true, updatable = false)
-    private UUID taskUuid;
-
     @Column(name = "root_quality_manual_uuid", nullable = true, insertable = true, updatable = false)
     private UUID rootQualityManualUuid;
 
@@ -71,7 +68,6 @@ public class TaskExecutionImportedEventEntity extends JpaEntity implements Seria
     }
 
     public TaskExecutionImportedEventEntity(UUID uuid,
-                                            UUID taskUuid,
                                             UUID rootQualityManualUuid,
                                             UUID rootProcessCtrlUuid,
                                             Instant timestampStart,
@@ -85,7 +81,6 @@ public class TaskExecutionImportedEventEntity extends JpaEntity implements Seria
                                             UUID tenantUuid,
                                             ViolationLevelType violationLevelAggregated) {
         this.uuid = uuid;
-        this.taskUuid = taskUuid;
         this.rootQualityManualUuid = rootQualityManualUuid;
         this.rootProcessControlUuid = rootProcessCtrlUuid;
         this.timestampStart = timestampStart;
@@ -98,14 +93,6 @@ public class TaskExecutionImportedEventEntity extends JpaEntity implements Seria
         this.shiftEndZoneOffset = shiftEndZoneOffset;
         this.tenantUuid = tenantUuid;
         this.violationLevelAggregated = violationLevelAggregated;
-    }
-
-    public UUID getTaskUuid() {
-        return taskUuid;
-    }
-
-    public void setTaskUuid(UUID taskUuid) {
-        this.taskUuid = taskUuid;
     }
 
     public UUID getTenantUuid() {
@@ -217,7 +204,6 @@ public class TaskExecutionImportedEventEntity extends JpaEntity implements Seria
     public String toString() {
         return "TaskExecutionImportedEvent{" +
                 "uuid=" + uuid +
-                "taskUuid=" + taskUuid +
                 ", rootQualityManualUuid=" + rootQualityManualUuid +
                 ", rootProcessControlUuid=" + rootProcessControlUuid +
                 ", timestampStart=" + timestampStart +

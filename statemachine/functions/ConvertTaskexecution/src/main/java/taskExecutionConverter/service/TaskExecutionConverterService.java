@@ -17,7 +17,7 @@ public class TaskExecutionConverterService {
     }
 
     public TaskExecutionImportedEventPayload getTaskExecution(UUID taskExecutionUuid) {
-        TaskExecutionImportedEventEntity taskExecutionImportedEventEntity = sampleDataRepository.findByTaskUuid(taskExecutionUuid).get();
+        TaskExecutionImportedEventEntity taskExecutionImportedEventEntity = sampleDataRepository.findByUuid(taskExecutionUuid).get();
 
         return TaskExecutionImportedEventPayload.fromTaskExecutionImportedEventEntity(taskExecutionImportedEventEntity);
     }

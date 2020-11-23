@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface SampleDataRepository extends CrudRepository<TaskExecutionImportedEventEntity, UUID> {
-    Optional<TaskExecutionImportedEventEntity> findByTaskUuid(UUID taskUuid);
+    Optional<TaskExecutionImportedEventEntity> findByUuid(UUID taskUuid);
 }

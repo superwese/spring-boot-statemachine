@@ -118,7 +118,6 @@ public class TaskExecutionImportedEventPayload implements Serializable {
     public String toString() {
         return "TaskExecution{" +
                 "uuid=" + uuid +
-                ", taskUuid=" + taskUuid +
                 ", rootProcessControlUuid=" + rootProcessControlUuid +
                 ", tenantUuid=" + tenantUuid +
                 ", rootQualityManualUuid=" + rootQualityManualUuid +
@@ -134,7 +133,6 @@ public class TaskExecutionImportedEventPayload implements Serializable {
         TaskExecutionImportedEventPayload taskExecutionImportedEventPayload = new TaskExecutionImportedEventPayload();
 
         taskExecutionImportedEventPayload.setUuid(taskExecutionImportedEventEntity.getUuid());
-        taskExecutionImportedEventPayload.setTaskUuid(taskExecutionImportedEventEntity.getTaskUuid());
         taskExecutionImportedEventPayload.setRootProcessControlUuid(taskExecutionImportedEventEntity.getRootProcessControlUuid());
         taskExecutionImportedEventPayload.setRootQualityManualUuid(taskExecutionImportedEventEntity.getRootQualityManualUuid());
         taskExecutionImportedEventPayload.setTenantUuid(taskExecutionImportedEventEntity.getTenantUuid());
