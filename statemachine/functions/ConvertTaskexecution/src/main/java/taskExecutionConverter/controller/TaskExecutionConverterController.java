@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import taskExecutionConverter.model.Request;
-import taskExecutionConverter.model.TaskExecutionEventPayload;
+import taskExecutionConverter.model.TaskExecutionImportedEventPayload;
 import taskExecutionConverter.service.TaskExecutionConverterService;
 
 @RestController
@@ -20,9 +20,9 @@ public class TaskExecutionConverterController {
     }
 
     @RequestMapping("*")
-    public ResponseEntity<TaskExecutionEventPayload> getTaskExecutionEventPayloadFor(@RequestBody Request request) {
-        TaskExecutionEventPayload taskExecutionEventPayload = taskExecutionConverterService.getTaskExecution(request.getTaskExecutionUuid());
+    public ResponseEntity<TaskExecutionImportedEventPayload> getTaskExecutionEventPayloadFor(@RequestBody Request request) {
+        TaskExecutionImportedEventPayload taskExecutionImportedEventPayload = taskExecutionConverterService.getTaskExecution(request.getTaskExecutionUuid());
 
-        return ResponseEntity.ok(taskExecutionEventPayload);
+        return ResponseEntity.ok(taskExecutionImportedEventPayload);
     }
 }

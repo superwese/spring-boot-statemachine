@@ -1,28 +1,24 @@
 package taskExecutionConverter.service;
 
 import org.springframework.stereotype.Service;
-import taskExecutionConverter.model.TaskExecutionEventPayload;
-import taskExecutionConverter.model.ViolationLevelType;
+import taskExecutionConverter.model.TaskExecutionImportedEventPayload;
+import taskExecutionConverter.repository.SampleDataRepository;
+import taskExecutionConverter.repository.model.TaskExecutionImportedEventEntity;
 
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
 public class TaskExecutionConverterService {
 
-    public TaskExecutionEventPayload getTaskExecution(UUID taskExecutionUuid) {
-        TaskExecutionEventPayload taskExecutionEventPayload = new TaskExecutionEventPayload();
-        taskExecutionEventPayload.setUuid(UUID.randomUUID());
-        taskExecutionEventPayload.setTaskUuid(taskExecutionUuid);
-        taskExecutionEventPayload.setRootProcessControlUuid(UUID.randomUUID());
-        taskExecutionEventPayload.setRootQualityManualUuid(UUID.randomUUID());
-        taskExecutionEventPayload.setShiftEnd(OffsetDateTime.now().plus(2, ChronoUnit.HOURS));
-        taskExecutionEventPayload.setShiftStart(OffsetDateTime.now().minus(1L, ChronoUnit.HOURS));
-        taskExecutionEventPayload.setTenantUuid(UUID.randomUUID());
-        taskExecutionEventPayload.setTimestampStart(OffsetDateTime.now());
-        taskExecutionEventPayload.setViolationLevelAggregated(ViolationLevelType.okplusca);
+    private SampleDataRepository sampleDataRepository;
 
-        return taskExecutionEventPayload;
+    public TaskExecutionConverterService(SampleDataRepository sampleDataRepository) {
+        this.sampleDataRepository = sampleDataRepository;
+    }
+
+    public TaskExecutionImportedEventPayload getTaskExecution(UUID taskExecutionUuid) {
+        TaskExecutionImportedEventEntity taskExecutionImportedEventEntity = sampleDataRepository.findByTaskUuid(taskExecutionUuid).get();
+
+        return TaskExecutionImportedEventPayload.fromTaskExecutionImportedEventEntity(taskExecutionImportedEventEntity);
     }
 }
