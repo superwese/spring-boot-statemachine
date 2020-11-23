@@ -15,13 +15,15 @@ pipeline {
         }
 
         stages {
-            dir('statemachine') {
+
 
                 stage('Check templates') {
-                    steps {
-                        withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
-                            wrap([$class: 'AnsiColorBuildWrapper']) {
-                                sh 'sam validate'
+                    dir('statemachine') {
+                        steps {
+                            withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                                wrap([$class: 'AnsiColorBuildWrapper']) {
+                                    sh 'sam validate'
+                                }
                             }
                         }
                     }
@@ -107,7 +109,7 @@ pipeline {
             }
 
  */
-            }
+
         }
 
 }
