@@ -31,21 +31,28 @@ pipeline {
 
                 stage('Compile & Test') {
                     steps {
-                        wrap([$class: 'AnsiColorBuildWrapper']) {
-                            sh "sam build"
+                        dir('statemachine') {
+                            wrap([$class: 'AnsiColorBuildWrapper']) {
+                                sh "sam build"
+                            }
                         }
                     }
                 }
 
                 stage('Deploy Integration') {
+                    /*
                     when {
                         branch 'master'
                     }
+
+                     */
                     steps {
-                        withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
-                            wrap([$class: 'AnsiColorBuildWrapper']) {
-                                sh "sam --version"
-                                sh "sam deploy --no-progressbar --config-env integration"
+                        dir('statemachine') {
+                            withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                                wrap([$class: 'AnsiColorBuildWrapper']) {
+                                    sh "sam --version"
+                                    sh "sam deploy --no-progressbar --config-env integration"
+                                }
                             }
                         }
                     }
