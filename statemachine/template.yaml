@@ -58,6 +58,14 @@ Parameters:
   EncryptedDatabasePassword:
     Type: String
     Description: Database admin account password
+  SNSTopic:
+    Type: String
+    Description: The Arn(!) of the Topic to publish to
+    Default: arn:aws:sns:eu-central-1:832077700054:CreateTaskExecutionCreatedEvents_TestTopic
+  SNSTopicName:
+    Type: String
+    Description: The the of the Topic to publish to ( required by the policy )
+    Default: CreateTaskExecutionCreatedEvents_TestTopic
 
 Resources:
   EventCreatorStateMachine:
@@ -72,7 +80,7 @@ Resources:
         RestartFunctionArn: !GetAtt RestartFunction.Arn
         DDBPutItem: !Sub arn:${AWS::Partition}:states:::dynamodb:putItem
         DDBTable: !Ref TransactionTable
-
+        SNSTopicArn: !Ref SNSTopic
       Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
         - LambdaInvokePolicy:
             FunctionName: !Ref RestartFunction
@@ -86,6 +94,18 @@ Resources:
             FunctionName: !Ref GetTaskExecutionsFunction
         - DynamoDBWritePolicy:
             TableName: !Ref TransactionTable
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref SNSTopicName
+        - CloudWatchLogsFullAccess
+      Logging:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn: !GetAtt StatemachineLogs.Arn
+        IncludeExecutionData: false
+        Level: ERROR
+
+  StatemachineLogs:
+    Type: AWS::Logs::LogGroup
 
   IncrementFunction:
     Type: AWS::Serverless::Function
@@ -105,7 +125,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
       CodeUri: functions/GetTaskexecutions
-      Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler::handleRequest
+      Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
       MemorySize: 768
       Timeout: 900
@@ -114,7 +134,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/ConvertTaskexecution
-      Handler: convertTaskexecution.App::handleRequest
+      Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
       MemorySize: 512
 
