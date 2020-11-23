@@ -38,19 +38,12 @@ Globals:
         RDS_USERNAME: root
         RDS_PASSWORD: !GetAtt DecryptedDatabasePassword.PlainText
     VpcConfig:
+      #change me for production, see correctManualInput template
       SecurityGroupIds:
-        - Fn::ImportValue:
-            'Fn::Sub':
-              - ${StagePrefix}FargateContainerSecurityGroup
-              - StagePrefix: !FindInMap
-                  - StageMapping
-                  - !Ref 'Stage'
-                  - Prefix
+        - sg-fa789592
       SubnetIds:
-        - !ImportValue SavR-PrivateSubnetA
-        - !ImportValue SavR-PrivateSubnetB
-        - !ImportValue SavR-PrivateSubnetC
-
+        - !ImportValue DefaultVpcSubnetTwoId
+        - !ImportValue DefaultVpcSubnetOneId
 Parameters:
   RdsPort:
     Type: String
@@ -74,7 +67,6 @@ Resources:
   EventCreatorStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
     Properties:
-      Name: !Sub EventCreatorStateMachine-${Stage}
       DefinitionUri: statemachine/taskExecutionEventCreator.asl.json
       DefinitionSubstitutions:
         IncrementFunctionArn: !GetAtt IncrementFunction.Arn
