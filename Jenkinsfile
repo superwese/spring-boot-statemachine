@@ -18,9 +18,9 @@ pipeline {
 
 
                 stage('Check templates') {
-                    dir('statemachine') {
                         steps {
-                            withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                            dir('statemachine') {
+                                withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
                                 wrap([$class: 'AnsiColorBuildWrapper']) {
                                     sh 'sam validate'
                                 }
