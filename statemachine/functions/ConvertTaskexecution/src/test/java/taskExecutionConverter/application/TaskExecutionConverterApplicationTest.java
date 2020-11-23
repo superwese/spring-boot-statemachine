@@ -8,11 +8,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import taskExecutionConverter.model.Request;
 import taskExecutionConverter.model.TaskExecutionImportedEventPayload;
 import taskExecutionConverter.repository.SampleDataRepository;
@@ -30,9 +26,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static taskExecutionConverter.controller.TaskExecutionConverterControllerTest.createEntity;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ActiveProfiles({"test"})
 public class TaskExecutionConverterApplicationTest {
 
     //this is an different repository than that the Handler sees

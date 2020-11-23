@@ -16,7 +16,6 @@ import static org.hamcrest.Matchers.is;
 
 public class TaskExecutionServiceTest {
 
-
     @Test
     public void service_converts_correct_the_db_entity_to_payload() {
         UUID taskExecutionUuid = UUID.randomUUID();
