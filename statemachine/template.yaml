@@ -106,7 +106,7 @@ Resources:
           - CloudWatchLogsLogGroup:
               LogGroupArn: !GetAtt StatemachineLogs.Arn
         IncludeExecutionData: false
-        Level: ERROR
+        Level: ALL
 
   StatemachineLogs:
     Type: AWS::Logs::LogGroup
