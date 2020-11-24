@@ -10,6 +10,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     private static SpringBootLambdaContainerHandler<LambdaProxyRequest, AwsHttpServletResponse> handler;
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
 
