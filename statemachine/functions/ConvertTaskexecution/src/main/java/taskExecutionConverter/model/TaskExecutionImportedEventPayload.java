@@ -2,14 +2,16 @@ package taskExecutionConverter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import taskExecutionConverter.repository.model.TaskExecutionImportedEventEntity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TaskExecutionEventPayload implements Serializable {
+public class TaskExecutionImportedEventPayload implements Serializable {
 
     private UUID uuid;
 
@@ -116,7 +118,6 @@ public class TaskExecutionEventPayload implements Serializable {
     public String toString() {
         return "TaskExecution{" +
                 "uuid=" + uuid +
-                ", taskUuid=" + taskUuid +
                 ", rootProcessControlUuid=" + rootProcessControlUuid +
                 ", tenantUuid=" + tenantUuid +
                 ", rootQualityManualUuid=" + rootQualityManualUuid +
@@ -126,6 +127,30 @@ public class TaskExecutionEventPayload implements Serializable {
                 ", shiftEnd=" + shiftEnd +
                 ", violationLevelAggregated=" + violationLevelAggregated +
                 '}';
+    }
+
+    public static TaskExecutionImportedEventPayload fromTaskExecutionImportedEventEntity(TaskExecutionImportedEventEntity taskExecutionImportedEventEntity) {
+        TaskExecutionImportedEventPayload taskExecutionImportedEventPayload = new TaskExecutionImportedEventPayload();
+
+        taskExecutionImportedEventPayload.setUuid(taskExecutionImportedEventEntity.getUuid());
+        taskExecutionImportedEventPayload.setRootProcessControlUuid(taskExecutionImportedEventEntity.getRootProcessControlUuid());
+        taskExecutionImportedEventPayload.setRootQualityManualUuid(taskExecutionImportedEventEntity.getRootQualityManualUuid());
+        taskExecutionImportedEventPayload.setTenantUuid(taskExecutionImportedEventEntity.getTenantUuid());
+        OffsetDateTime zonedStart = OffsetDateTime.ofInstant(taskExecutionImportedEventEntity.getTimestampStart(), taskExecutionImportedEventEntity.getTimestampStartZoneOffset());
+        taskExecutionImportedEventPayload.setTimestampStart(zonedStart);
+
+        LocalDateTime shiftStart = taskExecutionImportedEventEntity.getShiftStart();
+        if (shiftStart != null) {
+            taskExecutionImportedEventPayload.setShiftStart(OffsetDateTime.of(shiftStart, taskExecutionImportedEventEntity.getShiftStartZoneOffset()));
+        }
+
+        LocalDateTime shiftEnd = taskExecutionImportedEventEntity.getShiftEnd();
+        if (shiftEnd != null) {
+            taskExecutionImportedEventPayload.setShiftEnd(OffsetDateTime.of(shiftEnd, taskExecutionImportedEventEntity.getShiftEndZoneOffset()));
+        }
+        taskExecutionImportedEventPayload.setViolationLevelAggregated(taskExecutionImportedEventEntity.getViolationLevelAggregated());
+
+        return taskExecutionImportedEventPayload;
     }
 }
 

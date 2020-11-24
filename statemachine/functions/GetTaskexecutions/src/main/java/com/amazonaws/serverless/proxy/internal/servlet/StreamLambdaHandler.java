@@ -51,7 +51,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
                     new ExceptionHandler() {
                         @Override
                         public Object handle(Throwable ex) {
-                            return ex;
+                            throw new RuntimeException(ex);
                         }
 
                         @Override

@@ -12,12 +12,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import taskExecutionConverter.TaskExecutionConverterApplication;
-import taskExecutionConverter.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import taskExecutionConverter.TaskExecutionConverterApplication;
+import taskExecutionConverter.model.Request;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +48,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
                     new ExceptionHandler() {
                         @Override
                         public Object handle(Throwable ex) {
-                            return ex;
+                            throw new RuntimeException(ex);
                         }
 
                         @Override
