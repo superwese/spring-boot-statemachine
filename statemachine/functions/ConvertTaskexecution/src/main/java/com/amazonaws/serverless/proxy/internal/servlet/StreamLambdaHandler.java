@@ -4,6 +4,7 @@ import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.AsyncInitializationWrapper;
 import com.amazonaws.serverless.proxy.ExceptionHandler;
 import com.amazonaws.serverless.proxy.SecurityContextWriter;
+import com.amazonaws.serverless.proxy.internal.LambdaContainerHandler;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
@@ -19,6 +20,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import taskExecutionConverter.TaskExecutionConverterApplication;
 import taskExecutionConverter.model.Request;
+import taskExecutionConverter.model.TaskExecutionImportedEventPayload;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +38,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
 
     static {
         try {
+            LambdaContainerHandler.getContainerConfig().setInitializationTimeout(60_000);
             AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
             applicationContext.register(TaskExecutionConverterApplication.class);
 
@@ -86,7 +89,9 @@ public class StreamLambdaHandler implements RequestStreamHandler {
 
             AwsHttpServletResponse response = handler.proxy(proxyRequest, context);
 
-            output.write(response.getAwsResponseBodyBytes());
+            TaskExecutionImportedEventPayload payload = objectMapper.readValue(response.getAwsResponseBodyBytes(), TaskExecutionImportedEventPayload.class);
+
+            output.write( objectMapper.writeValueAsString(payload).getBytes() );
 
 
         } catch (JsonParseException e) {
