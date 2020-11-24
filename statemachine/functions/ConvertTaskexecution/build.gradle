@@ -24,12 +24,16 @@ dependencies {
     }
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.5.2'
 
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.0'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE'
     implementation 'mysql:mysql-connector-java:8.0.22'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.11.3'
 
+    // JAX-B dependencies for JDK 9+
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation "com.sun.xml.bind:jaxb-core:2.3.0"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.1"
+    implementation "javax.activation:activation:1.1.1"
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.0'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.7.0'
