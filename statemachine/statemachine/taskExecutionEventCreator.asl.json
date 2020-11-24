@@ -17,7 +17,7 @@
     "Restart Config": {
       "Type": "Pass",
       "Result": {
-        "maxExecutionCount": 1000,
+        "maxExecutionCount": 100,
         "numberOfProcessedTaksExecutions": 0
       },
       "ResultPath": "$.restart",
@@ -38,7 +38,7 @@
     },
     "Process Messages": {
       "Type": "Map",
-      "MaxConcurrency": 100,
+      "MaxConcurrency": 0,
       "Next": "Count ProcessedTaksExecutions",
       "InputPath": "$.taskexecutions",
       "ResultPath": "$.iteratorOut",
