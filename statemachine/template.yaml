@@ -69,7 +69,8 @@ Resources:
   EventCreatorStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
     Properties:
-      Name: !Sub EventCreatorStateMachine-${Stage}
+      Type: EXPRESS
+      Name: !Sub EventCreatorStateMachine-${Stage}-Express
       DefinitionUri: statemachine/taskExecutionEventCreator.asl.json
       DefinitionSubstitutions:
         IncrementFunctionArn: !GetAtt IncrementFunction.Arn
