@@ -1,5 +1,7 @@
 package taskExecutionConverter.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class TaskExecutionConverterControllerTest {
     private TaskExecutionConverterController taskExecutionConverterController;
 
     @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
     SampleDataRepository sampleDataRepository;
 
     @Test
@@ -47,6 +51,18 @@ public class TaskExecutionConverterControllerTest {
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody().getUuid(), is(request.getTaskExecutionUuid()));
+    }
+
+    @Disabled
+    public void testSerialize() {
+        //TODO: implement me
+        /*
+        create a sample TaskExecutionImportedEventPayload
+        serialize it as a Map<String, String>
+        test that OffsetDateTime.parse(map.get(EndDate())
+        return the sam eas input
+         */
+
     }
 
     public static TaskExecutionImportedEventEntity createEntity(UUID id) {
