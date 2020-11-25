@@ -74,9 +74,11 @@ pipeline {
                 stages {
                     stage('qs') {
                         steps {
-                            withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
-                                wrap([$class: 'AnsiColorBuildWrapper']) {
-                                    sh "sam deploy --no-progressbar --config-env qs"
+                            dir('statemachine') {
+                                withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                                    wrap([$class: 'AnsiColorBuildWrapper']) {
+                                        sh "sam deploy --no-progressbar --config-env qs"
+                                    }
                                 }
                             }
                         }
@@ -84,9 +86,11 @@ pipeline {
 
                     stage('eu-central-1') {
                         steps {
-                            withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
-                                wrap([$class: 'AnsiColorBuildWrapper']) {
-                                    sh "sam deploy --no-progressbar --config-env prod-eu"
+                            dir('statemachine') {
+                                withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
+                                    wrap([$class: 'AnsiColorBuildWrapper']) {
+                                        sh "sam deploy --no-progressbar --config-env prod-eu"
+                                    }
                                 }
                             }
                         }
@@ -94,28 +98,30 @@ pipeline {
 /*
                     stage('us-west-2') {
                         steps {
-                            withAWS(credentials: 'savr-pipeline', region: 'us-west-2') {
-                                wrap([$class: 'AnsiColorBuildWrapper']) {
-                                    sh "sam deploy --no-progressbar --config-env prod-americas"
+                            dir('statemachine') {
+                                withAWS(credentials: 'savr-pipeline', region: 'us-west-2') {
+                                    wrap([$class: 'AnsiColorBuildWrapper']) {
+                                        sh "sam deploy --no-progressbar --config-env prod-americas"
+                                    }
                                 }
                             }
                         }
                     }
                     stage('ap-southeast-1') {
                         steps {
-                            withAWS(credentials: 'savr-pipeline', region: 'ap-southeast-1') {
-                                wrap([$class: 'AnsiColorBuildWrapper']) {
-                                    sh "sam deploy --no-progressbar --config-env prod-apac"
+                            dir('statemachine') {
+                                withAWS(credentials: 'savr-pipeline', region: 'ap-southeast-1') {
+                                    wrap([$class: 'AnsiColorBuildWrapper']) {
+                                        sh "sam deploy --no-progressbar --config-env prod-apac"
+                                    }
                                 }
                             }
                         }
                     }
- */
+*/
                 }
 
             }
-
-
 
         }
 
