@@ -37,7 +37,7 @@ public class GetTaskExecutionsController {
 
         PageRequest pageRequest = PageRequest.of(currentPage, pageSize);
 
-        Page<UuidOnly> result = taskExecutionRepository.findAllByTenantUuidAndTimestampStartBetween(event.getTenantUuid(), event.getStartDate(), event.getEndDate(), pageRequest);
+        Page<UuidOnly> result = taskExecutionRepository.findAllByTimestampStartBetween( event.getStartDate(), event.getEndDate(), pageRequest);
 
         List<UUID> uuids = result.getContent().stream().map(UuidOnly::getUuid).collect(Collectors.toList());
 
