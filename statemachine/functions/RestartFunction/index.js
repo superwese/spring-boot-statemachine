@@ -5,6 +5,9 @@ exports.handler = function(event, context, callback) {
     console.log("event:\n", event);
     //force version
     const {StateMachineArn, input} = event;
+    delete input.taskexecutions;
+    delete input.iteratorOut;
+    delete input.processedInThisChunk;
 
     let params = {
         input: JSON.stringify(input),

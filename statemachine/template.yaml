@@ -29,7 +29,6 @@ Globals:
   Function:
     Runtime: java11
     Timeout: 60
-    MemorySize: 768
     Environment:
       Variables:
         SPRING_PROFILES_ACTIVE: !Ref SpringProfilesActive
@@ -69,7 +68,8 @@ Resources:
   EventCreatorStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
     Properties:
-      Name: !Sub EventCreatorStateMachine-${Stage}
+      Type: EXPRESS
+      Name: !Sub EventCreatorStateMachine-${Stage}-Express
       DefinitionUri: statemachine/taskExecutionEventCreator.asl.json
       DefinitionSubstitutions:
         IncrementFunctionArn: !GetAtt IncrementFunction.Arn
@@ -104,8 +104,8 @@ Resources:
         Destinations:
           - CloudWatchLogsLogGroup:
               LogGroupArn: !GetAtt StatemachineLogs.Arn
-        IncludeExecutionData: false
-        Level: ERROR
+        IncludeExecutionData: true
+        Level: ALL
 
   StatemachineLogs:
     Type: AWS::Logs::LogGroup
@@ -139,7 +139,7 @@ Resources:
       CodeUri: functions/ConvertTaskexecution
       Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 768
 
   RestartFunction:
     Type: AWS::Serverless::Function
