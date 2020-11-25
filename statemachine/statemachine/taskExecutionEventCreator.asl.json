@@ -38,7 +38,7 @@
     },
     "Process Messages": {
       "Type": "Map",
-      "MaxConcurrency": 1,
+      "MaxConcurrency": 10,
       "Next": "Count ProcessedTaksExecutions",
       "InputPath": "$.taskexecutions",
       "ResultPath": "$.iteratorOut",
