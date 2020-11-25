@@ -55,7 +55,7 @@ pipeline {
                         }
                     }
                 }
-/*
+
             stage('Proceed') {
                 when {
                     branch 'master'
@@ -91,7 +91,7 @@ pipeline {
                             }
                         }
                     }
-
+/*
                     stage('us-west-2') {
                         steps {
                             withAWS(credentials: 'savr-pipeline', region: 'us-west-2') {
@@ -110,10 +110,12 @@ pipeline {
                             }
                         }
                     }
+ */
                 }
+
             }
 
- */
+
 
         }
 
