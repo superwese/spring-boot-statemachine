@@ -29,7 +29,6 @@ Globals:
   Function:
     Runtime: java11
     Timeout: 60
-    MemorySize: 768
     Environment:
       Variables:
         SPRING_PROFILES_ACTIVE: !Ref SpringProfilesActive
@@ -67,6 +66,8 @@ Resources:
   EventCreatorStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
     Properties:
+      Type: EXPRESS
+      Name: !Sub EventCreatorStateMachine-${Stage}-Express
       DefinitionUri: statemachine/taskExecutionEventCreator.asl.json
       DefinitionSubstitutions:
         IncrementFunctionArn: !GetAtt IncrementFunction.Arn
@@ -101,8 +102,8 @@ Resources:
         Destinations:
           - CloudWatchLogsLogGroup:
               LogGroupArn: !GetAtt StatemachineLogs.Arn
-        IncludeExecutionData: false
-        Level: ERROR
+        IncludeExecutionData: true
+        Level: ALL
 
   StatemachineLogs:
     Type: AWS::Logs::LogGroup
@@ -136,7 +137,7 @@ Resources:
       CodeUri: functions/ConvertTaskexecution
       Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 768
 
   RestartFunction:
     Type: AWS::Serverless::Function
@@ -174,14 +175,33 @@ Resources:
                   - ':role/*'
 
   TransactionTable:
-    Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
+    Type: AWS::DynamoDB::Table
     Properties:
-      PrimaryKey:
-        Name: uuid
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 10
+      TableName: !Sub ${AWS::StackName}-status-${Stage}
+      AttributeDefinitions:
+        - AttributeName: uuid
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: tenantUuid
+          AttributeType: S
+      KeySchema:
+        - AttributeName: tenantUuid
+          KeyType: HASH
+        - AttributeName: uuid
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: status_idx
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: uuid
+              KeyType: RANGE
+          Projection:
+            NonKeyAttributes:
+              - error
+            ProjectionType: INCLUDE
+      BillingMode: PAY_PER_REQUEST
 
   ApplyRestartPolicy:
     Type: Custom::ApplyRestartPolicy
