@@ -29,7 +29,6 @@ Globals:
   Function:
     Runtime: java11
     Timeout: 60
-    MemorySize: 768
     Environment:
       Variables:
         SPRING_PROFILES_ACTIVE: !Ref SpringProfilesActive
@@ -105,7 +104,7 @@ Resources:
         Destinations:
           - CloudWatchLogsLogGroup:
               LogGroupArn: !GetAtt StatemachineLogs.Arn
-        IncludeExecutionData: false
+        IncludeExecutionData: true
         Level: ALL
 
   StatemachineLogs:
@@ -140,7 +139,7 @@ Resources:
       CodeUri: functions/ConvertTaskexecution
       Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 768
 
   RestartFunction:
     Type: AWS::Serverless::Function
