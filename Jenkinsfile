@@ -95,7 +95,7 @@ pipeline {
                             }
                         }
                     }
-/*
+
                     stage('us-west-2') {
                         steps {
                             dir('statemachine') {
@@ -118,7 +118,7 @@ pipeline {
                             }
                         }
                     }
-*/
+
                 }
 
             }

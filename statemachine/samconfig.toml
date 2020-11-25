@@ -91,9 +91,9 @@ parameter_overrides = [
     "Stage=prod",
     "SNSTopic=arn:aws:sns:us-west-2:926648644954:P-TaskExecutionImportedEventSDSTopic",
     "SpringProfilesActive=aws",
-    "RdsHostname=doesnotexistyet",
+    "RdsHostname=sample-data.csmcuq4yywxx.us-west-2.rds.amazonaws.com",
     "RdsPort=3306",
-    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDOJMehAzbsfAGMivHwIBEIAr87R/vIgVImVuMrdsegqfI6VGiMArLrsuEacxnTuJpX2yx1aMQ3KElYSUOw=="
+    "EncryptedDatabasePassword=AQECAHhqETYESuYlj+q9YB206pzpAZn0F6dulSAZW2o4Yqp+cAAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDNzW2UbHFwl2JvYH1wIBEIArqK4MJFZycty1lOfbth+V84kJCpiroQEtnrAF0S9aPc4dE4Nu2SXof1SDug=="
 ]
 
 [prod-apac]
@@ -110,8 +110,8 @@ parameter_overrides = [
     "Stage=prod",
     "SNSTopic=arn:aws:sns:ap-southeast-1:926648644954:P-TaskExecutionImportedEventSDSTopic",
     "SpringProfilesActive=aws",
-    "RdsHostname=doesnotexistyet",
+    "RdsHostname=sample-data.ccn3vvbf5o9u.ap-southeast-1.rds.amazonaws.com",
     "RdsPort=3306",
-    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDOJMehAzbsfAGMivHwIBEIAr87R/vIgVImVuMrdsegqfI6VGiMArLrsuEacxnTuJpX2yx1aMQ3KElYSUOw=="
+    "EncryptedDatabasePassword=AQECAHj/qwPgY21OqIsc80gt4mFcyMaD8wpq/cYh9p51QaMU9AAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGCzwymfBjSbSQQWcgIBEIAr6BJwsHmFQKzpIy+54nBaaz83o6ZeBT/4sno/kBPBCALwm27qBs6BNulocA=="
 ]
 
