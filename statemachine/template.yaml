@@ -185,8 +185,6 @@ Resources:
           AttributeType: S
         - AttributeName: status
           AttributeType: S
-        - AttributeName: error
-          AttributeType: S
         - AttributeName: tenantUuid
           AttributeType: S
       KeySchema:
