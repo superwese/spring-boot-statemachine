@@ -113,6 +113,9 @@
                 },
                 "status": {
                   "S": "success"
+                },
+                "tenantUuid": {
+                  "S.$": "$.messagePayload.tenantUuid"
                 }
               }
             },
@@ -144,6 +147,9 @@
                 },
                 "error": {
                   "S.$": "$.error-info.Cause"
+                },
+                "tenantUuid": {
+                  "S.$": "$.messagePayload.tenantUuid"
                 }
               }
             },
