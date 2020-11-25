@@ -177,14 +177,35 @@ Resources:
                   - ':role/*'
 
   TransactionTable:
-    Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
+    Type: AWS::DynamoDB::Table
     Properties:
-      PrimaryKey:
-        Name: uuid
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 10
+      TableName: !Sub ${AWS::StackName}-status-${Stage}
+      AttributeDefinitions:
+        - AttributeName: uuid
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: error
+          AttributeType: S
+        - AttributeName: tenantUuid
+          AttributeType: S
+      KeySchema:
+        - AttributeName: tenantUuid
+          KeyType: HASH
+        - AttributeName: uuid
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: status_idx
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: uuid
+              KeyType: RANGE
+          Projection:
+            NonKeyAttributes:
+              - error
+            ProjectionType: INCLUDE
+      BillingMode: PAY_PER_REQUEST
 
   ApplyRestartPolicy:
     Type: Custom::ApplyRestartPolicy
