@@ -40,10 +40,12 @@ pipeline {
                 }
 
                 stage('Deploy Integration') {
-                    when {
-                        branch 'master'
+/*
+                   when {
+                       branch 'master'
                     }
 
+ */
                     steps {
                         dir('statemachine') {
                             withAWS(credentials: 'savr-pipeline', region: 'eu-central-1') {
