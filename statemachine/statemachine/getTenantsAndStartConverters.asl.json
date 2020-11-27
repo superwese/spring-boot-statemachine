@@ -7,7 +7,6 @@
       "Comment": "Get's a 'paged' resultset of tenant uuids",
       "Type": "Task",
       "Resource": "${GetTenantsFunctionArn}",
-      "ResultPath": "$.tenants",
       "Retry": [ {
         "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException" ],
         "IntervalSeconds": 2,
@@ -17,6 +16,24 @@
       "Next": "Process Tenants"
     },
     "Process Tenants": {
+      "Type": "Map",
+      "Next": "Finish",
+      "ItemsPath": "$.content",
+      "MaxConcurrency": 1,
+      "Parameters": {
+        "tenantUuid.$": "$$.Map.Item.Value"
+      },
+      "Iterator": {
+        "StartAt": "Start StateMachine for Tenant",
+        "States": {
+          "Start StateMachine for Tenant": {
+            "Type": "Pass",
+            "End": true
+          }
+        }
+      }
+    },
+    "Finish": {
       "Type": "Pass",
       "End": true
     }
