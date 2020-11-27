@@ -1,0 +1,9 @@
+{
+  "Comment": "A state machine that retrieves tenantUuids from SDS and starts state machines ",
+  "StartAt": "Get Tenants",
+  "States": {
+    "Get Tenants": {
+      "Type": "Succeed"
+    }
+  }
+}
