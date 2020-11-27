@@ -4,6 +4,8 @@ import getTaskexecutions.model.Request;
 import getTaskexecutions.model.Response;
 import getTaskexecutions.repository.TaskExecutionRepository;
 import getTaskexecutions.repository.UuidOnly;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,8 @@ public class GetTaskExecutionsController {
     private final static int pageSize = 100;
 
     TaskExecutionRepository taskExecutionRepository;
+    private final Logger log = LoggerFactory.getLogger(GetTaskExecutionsController.class);
+
 
     public GetTaskExecutionsController(@Autowired TaskExecutionRepository taskExecutionRepository) {
         this.taskExecutionRepository = taskExecutionRepository;
@@ -33,11 +37,12 @@ public class GetTaskExecutionsController {
     public ResponseEntity<Response> handleRequest(@RequestBody Request event) {
         // returns a Response resembling the result of a paged result
         //
+        log.info("Got input " + event);
         int currentPage = Optional.ofNullable(event.getPage()).orElse(0);
 
         PageRequest pageRequest = PageRequest.of(currentPage, pageSize);
 
-        Page<UuidOnly> result = taskExecutionRepository.findAllByTimestampStartBetween( event.getStartDate(), event.getEndDate(), pageRequest);
+        Page<UuidOnly> result = taskExecutionRepository.findAllByTenantUuidAndTimestampStartBetween(event.getTenantUuid(), event.getStartDate(), event.getEndDate(), pageRequest);
 
         List<UUID> uuids = result.getContent().stream().map(UuidOnly::getUuid).collect(Collectors.toList());
 
