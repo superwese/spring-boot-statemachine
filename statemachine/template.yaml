@@ -70,8 +70,12 @@ Resources:
     Properties:
       Name: !Sub EventCreator-Starter-${Stage}
       DefinitionUri: statemachine/getTenantsAndStartConverters.asl.json
+      DefinitionSubstitutions:
+        GetTenantsFunctionArn: !GetAtt GetTenantsFunction.Arn
       Policies:
         - CloudWatchLogsFullAccess
+        - LambdaInvokePolicy:
+            FunctionName: !Ref GetTenantsFunction
       Logging:
         Destinations:
           - CloudWatchLogsLogGroup:
@@ -153,6 +157,14 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/ConvertTaskexecution
+      Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
+      Runtime: java11
+      MemorySize: 768
+
+  GetTenantsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/GetTenants
       Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
       MemorySize: 768

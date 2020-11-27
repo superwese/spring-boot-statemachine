@@ -3,7 +3,22 @@
   "StartAt": "Get Tenants",
   "States": {
     "Get Tenants": {
-      "Type": "Succeed"
+      "Type": "Task",
+      "Comment": "Get's a 'paged' resultset of tenant uuids",
+      "Type": "Task",
+      "Resource": "${GetTenantsFunctionArn}",
+      "ResultPath": "$.tenants",
+      "Retry": [ {
+        "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException" ],
+        "IntervalSeconds": 2,
+        "MaxAttempts": 6,
+        "BackoffRate": 2
+      } ],
+      "Next": "Process Tenants"
+    },
+    "Process Tenants": {
+      "Type": "Pass",
+      "End": true
     }
   }
 }

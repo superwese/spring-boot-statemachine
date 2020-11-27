@@ -55,4 +55,14 @@ public class Request {
     public void setPage(int page) {
         this.page = page;
     }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "tenantUuid=" + tenantUuid +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", page=" + page +
+                '}';
+    }
 }
