@@ -72,10 +72,13 @@ Resources:
       DefinitionUri: statemachine/getTenantsAndStartConverters.asl.json
       DefinitionSubstitutions:
         GetTenantsFunctionArn: !GetAtt GetTenantsFunction.Arn
+        IncrementFunctionArn: !GetAtt IncrementFunction.Arn
       Policies:
         - CloudWatchLogsFullAccess
         - LambdaInvokePolicy:
             FunctionName: !Ref GetTenantsFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref IncrementFunction
       Logging:
         Destinations:
           - CloudWatchLogsLogGroup:

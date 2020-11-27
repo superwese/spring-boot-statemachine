@@ -17,8 +17,9 @@
     },
     "Process Tenants": {
       "Type": "Map",
-      "Next": "Finish",
+      "Next": "More Tenants?",
       "ItemsPath": "$.content",
+      "ResultPath": "$.iteratorOut",
       "MaxConcurrency": 1,
       "Parameters": {
         "tenantUuid.$": "$$.Map.Item.Value"
@@ -32,6 +33,24 @@
           }
         }
       }
+    },
+    "More Tenants?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.last",
+          "BooleanEquals": true,
+          "Next": "Finish"
+        }
+      ],
+      "Default": "Next TenantPage Page"
+    },
+    "Next TenantPage Page": {
+      "Type": "Task",
+      "Resource": "${IncrementFunctionArn}",
+      "InputPath": "$.page",
+      "ResultPath": "$.page",
+      "Next": "Get Tenants"
     },
     "Finish": {
       "Type": "Pass",
