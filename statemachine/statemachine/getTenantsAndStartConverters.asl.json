@@ -33,6 +33,7 @@
         "StateMachineArn": "${EventCreatorStateMachineArn}"
       },
       "Resource": "${RestartFunctionArn}",
+      "ResultPath": "$.startExecution",
       "Next": "More Tenants?"
     },
     "More Tenants?": {
