@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestController
 @EnableWebMvc
 public class GetTenantsController {
-    private final static int pageSize = 5;
+    private final static int pageSize = 100;
 
     TaskExecutionsRepository taskExecutionRepository;
     private final Logger log = LoggerFactory.getLogger(GetTenantsController.class);
