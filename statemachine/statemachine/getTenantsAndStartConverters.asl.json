@@ -19,9 +19,9 @@
           "BackoffRate": 2
         }
       ],
-      "Next": "Start StateMachine for Tenant"
+      "Next": "Start StateMachine for Tenants"
     },
-    "Start StateMachine for Tenant": {
+    "Start StateMachine for Tenants": {
       "Type": "Task",
       "Parameters": {
         "input": {
@@ -33,7 +33,7 @@
         "StateMachineArn": "${EventCreatorStateMachineArn}"
       },
       "Resource": "${RestartFunctionArn}",
-      "End": true
+      "Next": "More Tenants?"
     },
     "More Tenants?": {
       "Type": "Choice",
