@@ -65,6 +65,34 @@ Parameters:
     Default: arn:aws:sns:eu-central-1:832077700054:CreateTaskExecutionCreatedEvents_TestTopic
 
 Resources:
+  GetTenantUuidsStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: !Sub EventCreator-Starter-${Stage}
+      DefinitionUri: statemachine/getTenantsAndStartConverters.asl.json
+      DefinitionSubstitutions:
+        GetTenantsFunctionArn: !GetAtt GetTenantsFunction.Arn
+        IncrementFunctionArn: !GetAtt IncrementFunction.Arn
+        EventCreatorStateMachineArn: !Ref EventCreatorStateMachine
+        RestartFunctionArn: !GetAtt RestartFunction.Arn
+
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref RestartFunction
+        - CloudWatchLogsFullAccess
+        - LambdaInvokePolicy:
+            FunctionName: !Ref GetTenantsFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref IncrementFunction
+      Logging:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn: !GetAtt StartermachineLogs.Arn
+        IncludeExecutionData: true
+        Level: ALL
+  StartermachineLogs:
+    Type: AWS::Logs::LogGroup
+
   EventCreatorStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
     Properties:
@@ -137,6 +165,14 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/ConvertTaskexecution
+      Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
+      Runtime: java11
+      MemorySize: 768
+
+  GetTenantsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/GetTenants
       Handler: com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler
       Runtime: java11
       MemorySize: 768
@@ -214,6 +250,7 @@ Resources:
       FunctionArn: !GetAtt RestartFunction.Arn
       FunctionVersion: !GetAtt ApplyRestartPolicyFunction.Version.Version
       RestartVersion: !GetAtt RestartFunction.Version.Version
+
   DecryptedDatabasePassword:
     Type: Custom::Decrypt
     Properties:

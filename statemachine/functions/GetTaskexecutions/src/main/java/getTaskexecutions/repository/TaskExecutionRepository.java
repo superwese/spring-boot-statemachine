@@ -19,6 +19,7 @@ public interface TaskExecutionRepository extends CrudRepository<TaskExecutionEnt
     Page<UuidOnly> findAllByTimestampStartBetween(Instant from, Instant to, Pageable pageable);
     Page<UuidOnly> findAllProjectedBy(Pageable pageRequest);
     List<UuidOnly> findAllProjectedBy();
+    Page<UuidOnly> findAllByTenantUuidInAndTimestampStartBetween(List<UUID> tenants, Instant from, Instant to, Pageable pageable);
 
 
     Page<UuidOnly> findPagedProjectedByShouldDisplayInputTypeTrueAndInputType(ProcessStepInputType inputType, PageRequest pageRequest);

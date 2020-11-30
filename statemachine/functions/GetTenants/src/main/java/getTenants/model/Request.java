@@ -1,4 +1,4 @@
-package getTaskexecutions.model;
+package getTenants.model;
 
 /*
 a request has this format:
@@ -15,15 +15,22 @@ a request has this format:
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Request {
-    private List<UUID> tenantUuids;
+    private UUID tenantUuid;
     private Instant startDate;
     private Instant endDate;
     private int page;
+
+    public UUID getTenantUuid() {
+        return tenantUuid;
+    }
+
+    public void setTenantUuid(UUID tenantUuid) {
+        this.tenantUuid = tenantUuid;
+    }
 
     public Instant getStartDate() {
         return startDate;
@@ -49,11 +56,13 @@ public class Request {
         this.page = page;
     }
 
-    public List<UUID> getTenantUuids() {
-        return tenantUuids;
-    }
-
-    public void setTenantUuids(List<UUID> tenantUuids) {
-        this.tenantUuids = tenantUuids;
+    @Override
+    public String toString() {
+        return "Request{" +
+                "tenantUuid=" + tenantUuid +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", page=" + page +
+                '}';
     }
 }

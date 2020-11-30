@@ -1,19 +1,7 @@
 {
   "Comment": "A state machine that retrieves taskexecutions from SDS and sends them to an SNS Topic for further processing",
-  "StartAt": "Fill Config",
+  "StartAt": "Restart Config",
   "States": {
-    "Fill Config": {
-      "Type": "Pass",
-      "Comment": "Ignored. provide these parameter to start an execution",
-      "Result": {
-        "tenantUuid": "DEADBEEF-0000-0000-0000-000000000000",
-        "startDate": "2016-10-01T00:00:00Z",
-        "enddate": "2016-10-01T00:00:00Z",
-        "page": 0
-      },
-      "ResultPath": null,
-      "Next": "Restart Config"
-    },
     "Restart Config": {
       "Type": "Pass",
       "Result": {

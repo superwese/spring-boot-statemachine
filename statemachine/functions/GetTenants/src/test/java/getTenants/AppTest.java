@@ -1,13 +1,13 @@
-package getTaskexecutions;
+package getTenants;
 
 import com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import getTaskexecutions.controller.GetTaskExecutionsController;
-import getTaskexecutions.model.Request;
-import getTaskexecutions.model.Response;
+import getTenants.controller.GetTenantsController;
+import getTenants.model.Request;
+import getTenants.model.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
@@ -41,7 +39,7 @@ public class AppTest {
     private final static MockLambdaContext context = new MockLambdaContext();
 
     @Autowired
-    private GetTaskExecutionsController getTaskExecutionsController;
+    private GetTenantsController getTenantsController;
 
     @Test
     public void testController() {
@@ -50,11 +48,9 @@ public class AppTest {
         event.setPage(13);
         event.setStartDate(Instant.now());
         event.setEndDate(Instant.now().plus(10, ChronoUnit.HOURS));
-        List<UUID> tenants = Collections.singletonList(UUID.randomUUID());
+        event.setTenantUuid(UUID.randomUUID());
 
-        event.setTenantUuids(tenants);
-
-        ResponseEntity<Response> response = getTaskExecutionsController.handleRequest(event);
+        ResponseEntity<Response> response = getTenantsController.handleRequest(event);
 
         assertTrue(response.getStatusCode() == HttpStatus.OK);
 
@@ -66,8 +62,7 @@ public class AppTest {
     public void testApp() throws IOException {
 
         Request request = new Request();
-        List<UUID> tenants = Collections.singletonList(UUID.randomUUID());
-        request.setTenantUuids(tenants);
+        request.setTenantUuid(UUID.randomUUID());
         request.setPage(5);
         request.setStartDate(Instant.now());
         request.setEndDate(Instant.now().plus(10, ChronoUnit.MINUTES));

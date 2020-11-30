@@ -40,8 +40,9 @@ pipeline {
                 }
 
                 stage('Deploy Integration') {
-                    when {
-                        branch 'master'
+
+                   when {
+                       branch 'master'
                     }
 
                     steps {

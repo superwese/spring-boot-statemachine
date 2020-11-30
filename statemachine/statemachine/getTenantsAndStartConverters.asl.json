@@ -1,0 +1,62 @@
+{
+  "Comment": "A state machine that retrieves tenantUuids from SDS and starts state machines ",
+  "StartAt": "Get Tenants",
+  "States": {
+    "Get Tenants": {
+      "Type": "Task",
+      "Comment": "Get's a 'paged' resultset of tenant uuids",
+      "Type": "Task",
+      "Resource": "${GetTenantsFunctionArn}",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Start StateMachine for Tenants"
+    },
+    "Start StateMachine for Tenants": {
+      "Type": "Task",
+      "Parameters": {
+        "input": {
+          "tenantUuids.$": "$.content",
+          "startDate": "2016-04-01T00:00:00Z",
+          "endDate": "2020-12-01T00:00:00Z",
+          "page": 0
+        },
+        "StateMachineArn": "${EventCreatorStateMachineArn}"
+      },
+      "Resource": "${RestartFunctionArn}",
+      "ResultPath": "$.startExecution",
+      "Next": "More Tenants?"
+    },
+    "More Tenants?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.last",
+          "BooleanEquals": true,
+          "Next": "Finish"
+        }
+      ],
+      "Default": "Next TenantPage Page"
+    },
+    "Next TenantPage Page": {
+      "Type": "Task",
+      "Resource": "${IncrementFunctionArn}",
+      "InputPath": "$.page",
+      "ResultPath": "$.page",
+      "Next": "Get Tenants"
+    },
+    "Finish": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}
