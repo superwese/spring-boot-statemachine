@@ -22,13 +22,18 @@
       "ResultPath": "$.iteratorOut",
       "MaxConcurrency": 1,
       "Parameters": {
-        "tenantUuid.$": "$$.Map.Item.Value"
+        "input.tenantUuid.$": "$$.Map.Item.Value",
+        "input.startDate.$": "$.startDate",
+        "input.endDate.$": "$.endDate",
+        "input.page": 0,
+        "stateMachineArn": "${EventCreatorStateMachineArn}"
       },
       "Iterator": {
         "StartAt": "Start StateMachine for Tenant",
         "States": {
           "Start StateMachine for Tenant": {
-            "Type": "Pass",
+            "Type": "Task",
+            "Resource": "${RestartFunctionArn}",
             "End": true
           }
         }

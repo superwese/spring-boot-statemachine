@@ -73,7 +73,12 @@ Resources:
       DefinitionSubstitutions:
         GetTenantsFunctionArn: !GetAtt GetTenantsFunction.Arn
         IncrementFunctionArn: !GetAtt IncrementFunction.Arn
+        EventCreatorStateMachineArn: !Ref EventCreatorStateMachine
+        RestartFunctionArn: !GetAtt RestartFunction.Arn
+
       Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref RestartFunction
         - CloudWatchLogsFullAccess
         - LambdaInvokePolicy:
             FunctionName: !Ref GetTenantsFunction
@@ -245,6 +250,7 @@ Resources:
       FunctionArn: !GetAtt RestartFunction.Arn
       FunctionVersion: !GetAtt ApplyRestartPolicyFunction.Version.Version
       RestartVersion: !GetAtt RestartFunction.Version.Version
+
   DecryptedDatabasePassword:
     Type: Custom::Decrypt
     Properties:
