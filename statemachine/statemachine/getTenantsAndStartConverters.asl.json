@@ -7,39 +7,33 @@
       "Comment": "Get's a 'paged' resultset of tenant uuids",
       "Type": "Task",
       "Resource": "${GetTenantsFunctionArn}",
-      "Retry": [ {
-        "ErrorEquals": [ "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException" ],
-        "IntervalSeconds": 2,
-        "MaxAttempts": 6,
-        "BackoffRate": 2
-      } ],
-      "Next": "Process Tenants"
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Start StateMachine for Tenant"
     },
-    "Process Tenants": {
-      "Type": "Map",
-      "Next": "More Tenants?",
-      "ItemsPath": "$.content",
-      "ResultPath": "$.iteratorOut",
-      "MaxConcurrency": 1,
+    "Start StateMachine for Tenant": {
+      "Type": "Task",
       "Parameters": {
         "input": {
-          "tenantUuid.$": "$$.Map.Item.Value",
+          "tenantUuids.$": "$.content",
           "startDate": "2016-04-01T00:00:00Z",
-          "endDate": "2016-10-01T00:00:00Z",
+          "endDate": "2020-12-01T00:00:00Z",
           "page": 0
         },
         "StateMachineArn": "${EventCreatorStateMachineArn}"
       },
-      "Iterator": {
-        "StartAt": "Start StateMachine for Tenant",
-        "States": {
-          "Start StateMachine for Tenant": {
-            "Type": "Task",
-            "Resource": "${RestartFunctionArn}",
-            "End": true
-          }
-        }
-      }
+      "Resource": "${RestartFunctionArn}",
+      "End": true
     },
     "More Tenants?": {
       "Type": "Choice",
