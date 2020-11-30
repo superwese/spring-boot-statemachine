@@ -15,22 +15,15 @@ a request has this format:
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Request {
-    private UUID tenantUuid;
+    private List<UUID> tenantUuids;
     private Instant startDate;
     private Instant endDate;
     private int page;
-
-    public UUID getTenantUuid() {
-        return tenantUuid;
-    }
-
-    public void setTenantUuid(UUID tenantUuid) {
-        this.tenantUuid = tenantUuid;
-    }
 
     public Instant getStartDate() {
         return startDate;
@@ -54,5 +47,13 @@ public class Request {
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    public List<UUID> getTenantUuids() {
+        return tenantUuids;
+    }
+
+    public void setTenantUuids(List<UUID> tenantUuids) {
+        this.tenantUuids = tenantUuids;
     }
 }

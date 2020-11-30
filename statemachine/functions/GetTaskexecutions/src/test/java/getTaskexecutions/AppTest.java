@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
@@ -48,7 +50,9 @@ public class AppTest {
         event.setPage(13);
         event.setStartDate(Instant.now());
         event.setEndDate(Instant.now().plus(10, ChronoUnit.HOURS));
-        event.setTenantUuid(UUID.randomUUID());
+        List<UUID> tenants = Collections.singletonList(UUID.randomUUID());
+
+        event.setTenantUuids(tenants);
 
         ResponseEntity<Response> response = getTaskExecutionsController.handleRequest(event);
 
@@ -62,7 +66,8 @@ public class AppTest {
     public void testApp() throws IOException {
 
         Request request = new Request();
-        request.setTenantUuid(UUID.randomUUID());
+        List<UUID> tenants = Collections.singletonList(UUID.randomUUID());
+        request.setTenantUuids(tenants);
         request.setPage(5);
         request.setStartDate(Instant.now());
         request.setEndDate(Instant.now().plus(10, ChronoUnit.MINUTES));
