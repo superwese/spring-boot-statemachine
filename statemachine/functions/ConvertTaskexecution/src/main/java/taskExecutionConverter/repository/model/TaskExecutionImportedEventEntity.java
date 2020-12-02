@@ -202,15 +202,20 @@ public class TaskExecutionImportedEventEntity extends JpaEntity implements Seria
 
     @Override
     public String toString() {
-        return "TaskExecutionImportedEvent{" +
+        return "TaskExecutionImportedEventEntity{" +
                 "uuid=" + uuid +
                 ", rootQualityManualUuid=" + rootQualityManualUuid +
                 ", rootProcessControlUuid=" + rootProcessControlUuid +
                 ", timestampStart=" + timestampStart +
+                ", timestampStartZoneOffset=" + timestampStartZoneOffset +
+                ", timestampEnd=" + timestampEnd +
+                ", timestampEndZoneOffset=" + timestampEndZoneOffset +
                 ", shiftStart=" + shiftStart +
+                ", shiftStartZoneOffset=" + shiftStartZoneOffset +
                 ", shiftEnd=" + shiftEnd +
+                ", shiftEndZoneOffset=" + shiftEndZoneOffset +
                 ", tenantUuid=" + tenantUuid +
-                ", violationLevelAggregated='" + violationLevelAggregated + '\'' +
+                ", violationLevelAggregated=" + violationLevelAggregated +
                 '}';
     }
 }
