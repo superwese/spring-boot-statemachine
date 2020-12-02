@@ -34,9 +34,9 @@ parameter_overrides = [
     "Stage=int",
     "SNSTopic=arn:aws:sns:eu-central-1:926648644954:I-TaskExecutionImportedEventSDSTopic",
     "SpringProfilesActive=aws",
-    "RdsHostname=sample-data-2020-11-22-23-12.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
+    "RdsHostname=sample-data-i.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
     "RdsPort=3306",
-    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDOJMehAzbsfAGMivHwIBEIAr87R/vIgVImVuMrdsegqfI6VGiMArLrsuEacxnTuJpX2yx1aMQ3KElYSUOw=="
+    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDIY5GEE7yJ4JOYAahQIBEIAr3EO3RaDtNs1iq1L2HHkqopPDtMRkXFRU5dkLl+sV8A3Wpa4LVECu1AOSfA=="
 ]
 
 [qs]
@@ -53,9 +53,9 @@ parameter_overrides = [
     "Stage=qs",
     "SNSTopic=arn:aws:sns:eu-central-1:926648644954:Q-TaskExecutionImportedEventSDSTopic",
     "SpringProfilesActive=aws",
-    "RdsHostname=sample-data-2020-11-22-23-12.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
+    "RdsHostname=qsr-webapp-qs-v2.ct96ec2hvi35.eu-central-1.rds.amazonaws.com",
     "RdsPort=3306",
-    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDOJMehAzbsfAGMivHwIBEIAr87R/vIgVImVuMrdsegqfI6VGiMArLrsuEacxnTuJpX2yx1aMQ3KElYSUOw=="
+    "EncryptedDatabasePassword=AQECAHgLQi3qdGRJXj364mnwRAA/6WUw63UNLkue4vEH5RSh3wAAAG4wbAYJKoZIhvcNAQcGoF8wXQIBADBYBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDF3JDdTqOg0JdUiq6gIBEIArQw6HvQudfgBVVVP6+sdkuKp/w6CUfz0Se3cOgcIv4y/chHntqTRDe2zrkg=="
 ]
 
 [prod-eu]

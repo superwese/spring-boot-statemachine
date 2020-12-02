@@ -116,8 +116,9 @@ public class TaskExecutionImportedEventPayload implements Serializable {
 
     @Override
     public String toString() {
-        return "TaskExecution{" +
+        return "TaskExecutionImportedEventPayload{" +
                 "uuid=" + uuid +
+                ", taskUuid=" + taskUuid +
                 ", rootProcessControlUuid=" + rootProcessControlUuid +
                 ", tenantUuid=" + tenantUuid +
                 ", rootQualityManualUuid=" + rootQualityManualUuid +

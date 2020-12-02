@@ -1,5 +1,7 @@
 package taskExecutionConverter.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import taskExecutionConverter.model.TaskExecutionImportedEventPayload;
 import taskExecutionConverter.repository.SampleDataRepository;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Service
 public class TaskExecutionConverterService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TaskExecutionConverterService.class);
     private SampleDataRepository sampleDataRepository;
 
     public TaskExecutionConverterService(SampleDataRepository sampleDataRepository) {
@@ -22,6 +25,13 @@ public class TaskExecutionConverterService {
                         .findByUuid(taskExecutionUuid)
                         .orElseThrow( () -> new RuntimeException("Can't find TaskExecution " + taskExecutionUuid));
 
-        return TaskExecutionImportedEventPayload.fromTaskExecutionImportedEventEntity(taskExecutionImportedEventEntity);
+        final TaskExecutionImportedEventPayload taskExecutionImportedEventPayload = TaskExecutionImportedEventPayload.fromTaskExecutionImportedEventEntity(taskExecutionImportedEventEntity);
+
+        LOG.info("Converting {} to {}",
+                taskExecutionImportedEventEntity.toString(),
+                taskExecutionImportedEventPayload.toString()
+        );
+
+        return taskExecutionImportedEventPayload;
     }
 }
