@@ -3,16 +3,14 @@ package taskExecutionConverter.application;
 import com.amazonaws.serverless.proxy.internal.servlet.StreamLambdaHandler;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import taskExecutionConverter.model.Request;
 import taskExecutionConverter.model.TaskExecutionImportedEventPayload;
-import taskExecutionConverter.repository.SampleDataRepository;
-import taskExecutionConverter.repository.model.TaskExecutionImportedEventEntity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,26 +22,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static taskExecutionConverter.controller.TaskExecutionConverterControllerTest.createEntity;
 
 public class TaskExecutionConverterApplicationTest {
 
-    //this is an different repository than that the Handler sees
-
-    @Autowired
-    SampleDataRepository sampleDataRepository;
-
-    private static final ObjectMapper objectMapper = new ObjectMapper()
+    private final static ObjectMapper objectMapper = new ObjectMapper()
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
+
     private final static MockLambdaContext context = new MockLambdaContext();
 
     @Test
-    @Disabled("We cannot inject Beans here because this test's ApplicationContext is different from the one created by the Requesthandler")
-    public void testApp() throws IOException {
-        UUID taskExecutionUuid = UUID.randomUUID();
-        TaskExecutionImportedEventEntity entity = createEntity(taskExecutionUuid);
-        sampleDataRepository.save(entity);
+    //@Disabled("We cannot inject Beans here because this test's ApplicationContext is different from the one created by the Requesthandler")
+    public void testApp() throws IOException, InterruptedException {
+        UUID taskExecutionUuid = UUID.fromString("DEADBEEF-0000-000-0000-0000000000000");
+        //TaskExecutionImportedEventEntity entity = createEntity(taskExecutionUuid);
+        //sampleDataRepository.save(entity);
 
 
         Request request = new Request();
@@ -52,9 +47,9 @@ public class TaskExecutionConverterApplicationTest {
         InputStream inputStream = new ByteArrayInputStream(objectMapper.writeValueAsBytes(request));
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        StreamLambdaHandler handler = new StreamLambdaHandler();
+        StreamLambdaHandler streamLambdaHandler = new StreamLambdaHandler();
 
-        handler.handleRequest(inputStream, outputStream, context);
+        streamLambdaHandler.handleRequest(inputStream, outputStream, context);
 
 
         TaskExecutionImportedEventPayload response = objectMapper.readValue(outputStream.toByteArray(), TaskExecutionImportedEventPayload.class);
