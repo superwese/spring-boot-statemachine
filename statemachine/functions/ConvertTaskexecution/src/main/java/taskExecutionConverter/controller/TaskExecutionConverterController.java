@@ -1,5 +1,8 @@
 package taskExecutionConverter.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,9 @@ import taskExecutionConverter.service.TaskExecutionConverterService;
 @EnableWebMvc
 public class TaskExecutionConverterController {
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     private TaskExecutionConverterService taskExecutionConverterService;
 
     public TaskExecutionConverterController(TaskExecutionConverterService taskExecutionConverterService) {
@@ -20,9 +26,9 @@ public class TaskExecutionConverterController {
     }
 
     @RequestMapping("*")
-    public ResponseEntity<TaskExecutionImportedEventPayload> getTaskExecutionEventPayloadFor(@RequestBody Request request) {
+    public ResponseEntity<String> getTaskExecutionEventPayloadFor(@RequestBody Request request) throws JsonProcessingException {
         TaskExecutionImportedEventPayload taskExecutionImportedEventPayload = taskExecutionConverterService.getTaskExecution(request.getTaskExecutionUuid());
 
-        return ResponseEntity.ok(taskExecutionImportedEventPayload);
+        return ResponseEntity.ok(objectMapper.writeValueAsString(taskExecutionImportedEventPayload));
     }
 }
