@@ -9,6 +9,7 @@ import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -29,10 +30,11 @@ import java.io.OutputStream;
 
 public class StreamLambdaHandler implements RequestStreamHandler {
     private final Logger log = LoggerFactory.getLogger(StreamLambdaHandler.class);
-    private static SpringBootLambdaContainerHandler<LambdaProxyRequest, AwsHttpServletResponse> handler;
+    public static SpringBootLambdaContainerHandler<LambdaProxyRequest, AwsHttpServletResponse> handler;
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule());
 
